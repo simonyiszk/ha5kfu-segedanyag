@@ -1,0 +1,55 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+
+\usepackage{color}
+%\usepackage[magyar]{babel}
+\usepackage{listings}
+\usepackage{graphicx}
+\usepackage{enumerate}
+\usepackage{tikz}
+\usetikzlibrary{shapes,arrows}
+\usetikzlibrary{positioning}
+
+\renewcommand{\refname}{Irodalomjegyzék}
+\renewcommand{\contentsname}{Tartalom}
+\renewcommand{\lstlistingname}{Lista}
+\usepackage[
+	pdftitle={HA5KFU tanfolyam},
+	pdfauthor={HA5KFU Rádióamatőr Klub},
+	pdfsubject={HA5KFU tanfolyam},
+	pdfcreator={latex},
+	pdfkeywords={ },
+	pdfpagemode=UseOutlines,
+	pdfdisplaydoctitle=true,
+	pdflang=hu,
+	unicode
+]{hyperref}
+
+\pagestyle{plain}
+\begin{document}
+\begin{center}
+\includegraphics[width=300pt,keepaspectratio]{figures/ha5kfu.eps}
+\\[2cm]
+
+{\huge \bfseries Forgalmazási ismeretek \\[2cm]}
+
+
+
+\end{center}
+\tableofcontents 
+\newpage
+\section{Jogszabályok}
+\subsection{Rádióamatőr engedély}
+\subsection{Hívójelek}
+
+\newpage
+\begin{thebibliography}{9}
+\bibitem{5kdr_j} 
+Budapest Fővárosi Rádióamatőr Klub 
+\textit{Rádióamatőr vizsgára felkészítő jegyzet}. 
+\\\texttt{https://www.ha5kdr.hu/}
+
+
+\end{thebibliography}
+
+\end{document}
