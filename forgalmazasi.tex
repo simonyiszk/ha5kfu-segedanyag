@@ -1,20 +1,18 @@
 \documentclass[12pt,a4paper]{article}
 \usepackage[utf8]{inputenc}
-
-\usepackage{color}
-%\usepackage[magyar]{babel}
-\usepackage{listings}
 \usepackage{graphicx}
+\usepackage{color}
+\usepackage[magyar]{babel}
+\usepackage{listings}
+
 \usepackage{enumerate}
 \usepackage{tikz}
 \usetikzlibrary{shapes,arrows}
 \usetikzlibrary{positioning}
 
-\renewcommand{\refname}{Irodalomjegyzék}
-\renewcommand{\contentsname}{Tartalom}
 \renewcommand{\lstlistingname}{Lista}
 \usepackage[
-	pdftitle={HA5KFU tanfolyam},
+	pdftitle={HA5KFU tanfolyam - Forgalmazási ismeretek},
 	pdfauthor={HA5KFU Rádióamatőr Klub},
 	pdfsubject={HA5KFU tanfolyam},
 	pdfcreator={latex},
@@ -26,30 +24,147 @@
 ]{hyperref}
 
 \pagestyle{plain}
+\sloppy
 \begin{document}
 \begin{center}
 \includegraphics[width=300pt,keepaspectratio]{figures/ha5kfu.eps}
-\\[2cm]
+\\[0.5cm]
+Rádióamatőr tanfolyamot segítő jegyzet az alapvető ismeretekről \\
+Összeállította: Szabó Áron % Feel free to add yourself
+\\[1cm]
 
 {\huge \bfseries Forgalmazási ismeretek \\[2cm]}
 
 
 
 \end{center}
-\tableofcontents 
+
+\renewcommand{\contentsname}{Tartalom}\tableofcontents 
 \newpage
 \section{Jogszabályok}
+
+A rádióamatőr tevékenységet a világ szinte minden országában jogszabályok szabályozzák. Magyarországon a hazai törvények és  \textbf{NMHH} (Nemzeti Média és Hírközlési Hatóság) rendeletek.
+
+Többek között a rádióamatőr vizsgáról, engedélykiadásról és forgalmazásról rendelkeznek ezek a szabályozások.  
+
+A rádióamatőr szolgálatra nemzetközi szabályok is érvényesek. A Nemzetközi Távközlési Egyesület (International Telecommunication Union,  \textbf{ITU}) osztja fel a frekvenciatartományt sávokra, így az amatőr frekvenciasávokat illetve ezeken a szolgálat jogállását (elsődleges vagy másodlagos). Az ITU három régióra osztja fel a Földet, egy régión belül a szabályozások egységesek \cite{iaru_regi}.
+
+A Nemzetközi Rádióamatőr Szövetség (International Amateur Radio Union, \textbf{IARU}) tesz ajánlást az amatőr sávok felosztására. Általában a sáv elején a kisebb (CW, SSB), a végén a nagyobb sávszélességű módok (FM) találhatók. A sávfelosztás ajánlást ad az átjátszóállomások és beacon-ök frekvenciáira is \cite{iaru}. 
+
+Európában és néhány más országban a Postai és Távközlési Igazgatások Európai Értekezlete (European Conference of Postal and Telecommunications Administrations, \textbf{CEPT}) kialakított egy egységesített vizsgarendszert (Harmonized Amateur Radio Examination Certificate, HAREC), hogy a tagállamok ezeket a vizsgákat kölcsönösen elismerjék, az alapján rádióamatőr engedélyt adjanak ki. 
 \subsection{Rádióamatőr engedély}
-\subsection{Hívójelek}
+Magyarországon vizsgabizonyítvány birtokában az NMHH állítja ki a rádióamatőr engedélyt. Amatőr rádióállomást üzemeltetni, önállóan forgalmatni csak amatőrengedély birtokában szabad.
+
+Háromféle amatőrállomás lehet:
+
+\begin{itemize}
+\item Egyéni: az amatőr engedély egy természetes személyhez tartozik
+\item Közösségi: egy rádióamatőr klub tartja üzemben
+\item Különleges amatőrállomás: pl. felügyelet nélküli jeladó, vagy átjátszó állomás, alkalmi amatőrállomás
+\end{itemize} 
+
+Az egyéni amatőr engedélynek a vizsga szintje alapján háromféle fokozata van: 
+
+\begin{itemize}
+\item Kezdő (csak 14 és 18 éves kor között, illetve 60 éves kor felett igénylehtő)
+\item CEPT Novice
+\item CEPT HAREC
+\end{itemize} 
+Az alacsonyabb szintű engedélyeken teljesítmény és egyéb korlátozások alá esnek. Közösségi állomás csak CEPT HAREC egyéni engedély birtokában üzemeltethető.
+
+A rádióamatőr engedély tartalmazza a Morze engedélyt is (ha van), távíró módot csak sikeres Morze vizsgával lehet használni.
+
+\subsubsection{Hívójelek}
+
+A hívójel segítségével a világ bármelyik amatőrállomása azonosítható, angol betűkből és számjegyekből áll. Két része az előtag és az utótag.
+
+Az előtag első néhány karaktere az (ITU által kijelölt) országkód, Magyarország esetén HA vagy HG. Az országkód utáni részt a nemzetek saját hatáskörben oszthatják ki, hazánkban ez egy számjegy (ami régebbi szabályozás szerint Magyarország egy régióját azonosította).
+
+Az utótag Magyarországon szabadon választható. A teljes hívójel (egyéni és közösségi) minimum 5, maximum 7 karakterből állhat.
+
+\subsubsection{QTH}
+
+A rádióamatőr engedély tartalmazza az amatőrállomás telepítési helyét is (rövidítése QTH). Ha ideiglenesen a telepítési helyen kívülről forgalmazunk, használhatjuk a hívójelben a /P (portable) jelet a hívójelünk után.
+
+\section{Forgalmazás}
+
+A rádióamatőr másik rádióamatőrrel létesíthet összeköttetést, ezt nevezzük forgalmazásnak. A forgalmazást (amatőrök számára) közérthető nyelven, titkosítatlanul kell folytatni, tartalma szakmai (tilos politika, ipari, gazdasági adatok, megtévesztő jelek, műsor sugárzása).
+
+Az amatőr rádióadást hívójellel kell azonosítani.
+
+A forgalmazást sokféle üzemmódban lehet folytatni, néhány példa:
+
+\begin{itemize}
+\item CW: Continuous Wave, távíró üzemmód. A vivőfrekvencia megléte vagy hiánya adja a két állapotú jelet. A Morze ABC segítségével tudunk karaktereket átvinni. A CW-nek van a legkisebb sávszélesség igénye az összes üzemmód közül.
+\item Fónia: a rádióamatőr beszéddel kommunikál
+\begin{itemize}
+\item SSB: Single Side Band AM: Amplitúdómodulált jel, amiből a vivő és az egyik oldalsáv elnyomott. Így kisebb teljesítményen és kisebb sávszélességen lehet adni. Az FM-nél gyengébb hangminőségű, de kevésbé érzékeny a zajra. Rövidhullámon ez az üzemmód jellemző, távolsági összeköttetésekre (DX) a legalkalmasabb.
+\item FM: Frekvenciamodulált jel, használata az ultrarövid amatőrsávon jellemző.
+\item Digitális: a hang átvitelére valamilyen digitális kódolást használ. Jó hangminőség, de érzékeny a zajhatásokra.
+\end{itemize}
+\item Karakteres átvitel
+\item Képtovábbítás: 
+\end{itemize}
+\subsection{Fónia forgalmazás}
+
+Amikor egy frekvencián el szeretnénk kezdeni adni, figyeljünk be, hogy azt nem használja-e már valaki más. Kérdezzünk be: "Szabad ez a frekvencia?", ha nem válaszolnak, biztosra vehetjük, hogy nem zavarunk olyat, akit mi nem hallunk.
+
+Ha bármilyen másik amatőrállomással szeretnénk kapcsolatot létesíteni, adjunk általános hívást (angolul CQ). Ezt és minden további adást is azonosítsunk a hívójelünkkel.
+
+Adás során érdemes a fontosabb üzeneteket megismételni, hogy a másik fél biztosan értse. A nehezen érthető szavakat, hívójelet érdemes betűzni. Az adás végét zárjuk le: "Vissza hozzád" (angolul Back to you), hogy a másik tudja, hogy mikor adhat, illetve ne zavarjon bele az adásunkba (szimplex módban adás közben nincs vétel).
+
+\subsection{Riport}
+
+A rádióamatőrök az adást riporttal értékelik, morze esetén RST, fónia esetén RS.
+
+\begin{itemize}
+\item R: \textbf{Readability} (1-5) Érthetőség, mennyire érthetően, tisztán hallottuk a másikat
+\item S: \textbf{Signal} (1-9) Jelszint, a rádiónk kijelzőjéről tudjuk leolvasni
+\item T: \textbf{Tone} (1-5) A CW jel minősége
+\end{itemize}
+
+Egy tisztán érthető, nagy jelszintű fónia adásra például 59-es (ötös kilences) riportot adunk.
+
+\subsection{Naplózás}
+
+Az összeköttetésekről naplót kell vezetni, amiben az alábbi információk szerepelnek:
+\begin{itemize}
+\item \textbf{Sorszám}
+\item \textbf{Dátum és idő}: a forgalmazás kezdetének ideje GMT időzóna szerint
+\item \textbf{Sáv vagy frekvencia} ahol az összeköttetés történt
+\item \textbf{Az ellenállomás hívójele}
+\item \textbf{Adott és vett riport}, pl 59 - 59 ha kifogástalan az összeköttetés
+\item \textbf{Üzemmód}: FM, SSB...
+\item Egyéb információk: QTH (ellenállomás helye) vagy QRA (az ellenállomás /rádióklub/ neve), az operátor neve, stb.
+\end{itemize}
+
+
+\subsection{Szakzsargon}
+
+\subsection{Rádióamatőr sávok}
+
+\section{A rádió részei}
 
 \newpage
+
+\renewcommand{\refname}{Irodalomjegyzék}
 \begin{thebibliography}{9}
 \bibitem{5kdr_j} 
 Budapest Fővárosi Rádióamatőr Klub 
 \textit{Rádióamatőr vizsgára felkészítő jegyzet}. 
-\\\texttt{https://www.ha5kdr.hu/}
+\\\url{https://www.ha5kdr.hu/}
 
+\bibitem{rendelet} 
+\textit{15/2013. (IX. 25.) NMHH rendelet a rádióamatőr szolgálatról} 
+\\\url{http://njt.hu/cgi_bin/njt_doc.cgi?docid=163445}
 
+\bibitem{iaru_regi} 
+\textit{IARU / ITU Regions} 
+\\\url{http://www.iaru.org/regions.html}
+
+\bibitem{iaru} 
+\textit{IARU Spectrum and Band Plans} 
+\\\url{https://www.iaru-r1.org/index.php/spectrum-and-band-plans/}
 \end{thebibliography}
 
 \end{document}
