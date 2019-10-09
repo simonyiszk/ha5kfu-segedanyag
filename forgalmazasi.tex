@@ -29,7 +29,7 @@
 \begin{center}
 \includegraphics[width=300pt,keepaspectratio]{figures/ha5kfu.eps}
 \\[0.5cm]
-Rádióamatőr tanfolyamot segítő jegyzet az alapvető ismeretekről \\
+Rádióamatőr tanfolyamot segítő jegyzet, egyelőre kidolgozás alatt \\
 Összeállította: Szabó Áron % Feel free to add yourself
 \\[1cm]
 
@@ -103,7 +103,7 @@ A forgalmazást sokféle üzemmódban lehet folytatni, néhány példa:
 \item Digitális: a hang átvitelére valamilyen digitális kódolást használ. Jó hangminőség, de érzékeny a zajhatásokra.
 \end{itemize}
 \item Karakteres átvitel
-\item Képtovábbítás: 
+\item Képtovábbítás (Slow Scan Television, ATV) 
 \end{itemize}
 \subsection{Fónia forgalmazás}
 
@@ -167,18 +167,26 @@ A rádióamatőrök csak a számukra kijelölt sávokon, más rádióamatőrökk
 
 \subsubsection{Amatőr sávok felosztása}
 
-\section{Hullámterjedés}
-
-\section{A rádió részei}
+A frekvenciakiosztás az IARU honlapján elérhető \cite{iaru}.
 
 \subsection{Zajzár}
 
-\paragraph{Squelch}
-\paragraph{RF Squelch}
-\paragraph{CTCSS}
-\paragraph{DCS}
+A zajzár feladata, hogy a vett jelet csak adás esetén halljuk: ha csak zaj, vagy számunkra érdektelen adást veszünk, a zajzár bekapcsol, és lenémítja a rádiót.
 
+\paragraph{Squelch}
+
+Squelch (rövidítve SQL), magyarul zajzár, ha egy bizonyos jelerősség alatt van a vétel, a hangszóró kikapcsol. Ez FM üzemmód esetén hasznos, ahol hangos zajt hallunk, ha nem hangolunk adásra.
+\paragraph{CTCSS}
+
+A Continuous Tone-Coded Squelch System (CTCSS) egy alacsony frekvenciájú színusz jelet ad a hanghoz, aminek 50 különböző frekvenciája lehet. Egy flottához tartozó rádiók ugyanazt a frekvenciájú CTCSS-t használják, így a zajzár csak akkor nyit ki, ha az adás mellé a beállított frekvenciájú hullám van hozzáadva.
+
+Fontos, hogy a CTCSS nem véd az interferencia ellen, így az egy frekvenciára hangolt, különböző CTCSS-t használó rádiók ugyanúgy zavarhatják egymást (csak egymás adását nem veszik észre).
+\paragraph{DCS}
+A Digital-Coded Squelch hasonlóan működik a CTCSS-hez, csak az folyamatos hullám helyett digitális bitsorozatot használ.
 \subsection{Átjátszók}
+Átjátszóállomásokat közvetlen terjedés esetén használunk, amikor nem látunk rá a másik állomásra. Az átjátszónak van egy megadott felmenő és lejövő frekvenciája, ezeken veszi és adja az átjátszott adásokat. Ezek nem lehetnek azonosak, hiszen akkor az átjátszó a vett adását zavarná, és azonnal begerjedne. Az átjátszó használatához rádiónkat úgy kell beállítani, hogy a lejövő frekvencián vegyen, de adáshoz kapcsoljon át a felmenő frekvenciára. 
+
+Egyes átjátszóállomások úgy vannak beállítva, hogy csak a megfelelő CTCSS vagy DCS kód észlelésekor lépnek működésbe.
 \newpage
 
 \renewcommand{\refname}{Irodalomjegyzék}
