@@ -75,7 +75,7 @@ Kössünk fel egy PET palackot (\ref{fig:palack}. ábra)! Ha energiát adunk bel
 
 \begin{figure}[H]
 \begin{center}
-\includegraphics[width=4cm]{figures/szurok_palack.eps}
+\includegraphics[width=3cm]{figures/szurok_palack.eps}
 \caption{Kössünk fel egy PET palackot}
 \label{fig:palack}
 \end{center}
@@ -93,6 +93,18 @@ Kössünk fel egy PET palackot (\ref{fig:palack}. ábra)! Ha energiát adunk bel
 \end{figure}
 
 Az elrendezés csak egy frekvencia környékén enged át, sáváteresztő jellegű. Ha egyszerre több ember különböző frekvenciával "gerjeszti", akkor is csak a rezonancia frekvencia tud látszani kívülről.
+\begin{figure}[H]
+\label{fig:rezgo}
+\centering
+\begin{tikzpicture}
+
+	\draw
+	(0,0) node(center){} 
+	(center) 	to [L] ++(0,-2) to [short] ++(2,0)  to [C] ++(0,2)  to [short] (center) 
+	;
+    \end{tikzpicture}
+\caption{Rezgőkör} 
+\end{figure}
 
 \section{Pár gyakorlati elrendezés}
 
@@ -118,7 +130,7 @@ Az elrendezés csak egy frekvencia környékén enged át, sáváteresztő jelle
 \caption{Aluláteresztő szűrő} 
 \end{figure}
 
-
+\vspace{0.5cm}
 
 \begin{figure}[H]
 \label{fig:felul}
@@ -140,7 +152,29 @@ Az elrendezés csak egy frekvencia környékén enged át, sáváteresztő jelle
     \end{tikzpicture}
 \caption{Felüláteresztő szűrő} 
 \end{figure}
+\vspace{0.5cm}
+\begin{center}
+\begin{minipage}{.5\textwidth}
 
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=6cm]{figures/szurok_felul.eps}
+\caption{Felüláteresztő szűrő}
+\label{fig:felulk}
+\end{center}
+\end{figure}
+\end{minipage}%
+\begin{minipage}{.5\textwidth}
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=6cm]{figures/szurok_alul.eps}
+\caption{Aluláteresztő szűrő}
+\label{fig:alulk}
+\end{center}
+\end{figure}
+\end{minipage}
+\end{center}
+\newpage
 
 \begin{figure}[H]
 \label{fig:sava}
@@ -169,6 +203,8 @@ Az elrendezés csak egy frekvencia környékén enged át, sáváteresztő jelle
     \end{tikzpicture}
 \caption{Sáváteresztő szűrő} 
 \end{figure}
+
+\vspace{0.5cm}
 
 
 \begin{figure}[H]
@@ -203,6 +239,34 @@ Az elrendezés csak egy frekvencia környékén enged át, sáváteresztő jelle
 \caption{Sávzáró szűrő} 
 \end{figure}
 
+
+\vspace{0.5cm}
+
+\begin{center}
+\begin{minipage}{.5\textwidth}
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=6cm]{figures/szurok_sav.eps}
+\caption{Sáváteresztő szűrő}
+\label{fig:savk}
+\end{center}
+\end{figure}
+\end{minipage}%
+\begin{minipage}{.5\textwidth}
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=6cm]{figures/szurok_savz.eps}
+\caption{Sávzáró szűrő}
+\label{fig:savzk}
+\end{center}
+\end{figure}
+\end{minipage}
+\end{center}
+
+\newpage
+
 \section{Keverők}
 
 
@@ -210,7 +274,47 @@ Az elrendezés csak egy frekvencia környékén enged át, sáváteresztő jelle
 
 Nagy frekvenciákra így is lehetetlen keskeny szűrőt építeni. Megoldás: toljuk el a jelet!
 
-Ugyanolyan bonyolultságú szűrővel egyre keskenyebb sávot szűrünk!
+
+\begin{figure}[H]
+\label{fig:keverok}
+\centering
+\begin{tikzpicture}
+
+	\draw
+	
+	(1.2,1.7) node[label={[font=\footnotesize]above:Antenna}] {}
+	(1,-0.5) node[label={[font=\footnotesize]below:9 GHz - 14GHz}] {}
+	
+	(5,-0.5) node[label={[font=\footnotesize]below:800 MHz - 1000 MHz}] {}
+	
+	(9,-0.5) node[label={[font=\footnotesize]below:450 MHz - 550 MHz}] {}
+	
+	
+	(3,-2.5) node[label={[font=\footnotesize]below:10 GHz}] {}
+	(7,-2.5) node[label={[font=\footnotesize]below:500 MHz}] {}
+	
+	
+	(3,0.5) node[label={[font=\footnotesize]above:Keverő}] {}
+	(7,0.5) node[label={[font=\footnotesize]above:Keverő}] {}
+	
+	(0,0)[antenna]node(ant){}
+	(3,0)[mixer] node(mix){}	
+	
+	(7,0)[mixer] node(mix2){}	
+	(3.5,-2)[oscillator] node(osc){}	
+	(7.5,-2)[oscillator] node(osc){}	
+	(ant) to [bandpass] ++(2,0) to [short] ++(0.5,0)
+	(3,-1.5) to [short] (3,-0.5)
+	(3.5,0) to [bandpass] ++(2.5,0) to [short] ++(0.5,0)
+	(7,-1.5) to [short] (7,-0.5)
+	(7.5,0) to [bandpass] ++(2.5,0) to [short] ++(0.5,0)
+	;
+    \end{tikzpicture}
+\caption{
+Ugyanolyan bonyolultságú szűrővel egyre keskenyebb sávot szűrünk!} 
+\end{figure}
+
+
 \newpage
 
 %\renewcommand{\refname}{Irodalomjegyzék}
