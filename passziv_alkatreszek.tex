@@ -1,0 +1,103 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx}
+\usepackage{color}
+\usepackage[magyar]{babel}
+\usepackage{listings}
+
+\usepackage{enumerate}
+\usepackage{tikz}
+\usetikzlibrary{shapes,arrows}
+\usetikzlibrary{positioning}
+
+\renewcommand{\lstlistingname}{Lista}
+\usepackage[
+	pdftitle={HA5KFU - Passzív alkatrészek},
+	pdfauthor={HA5KFU Rádióamatőr Klub},
+	pdfsubject={HA5KFU tananyag},
+	pdfcreator={latex},
+	pdfkeywords={ },
+	pdfpagemode=UseOutlines,
+	pdfdisplaydoctitle=true,
+	pdflang=hu,
+	unicode
+]{hyperref}
+
+\pagestyle{plain}
+\sloppy
+\begin{document}
+\begin{center}
+\includegraphics[width=300pt,keepaspectratio]{figures/ha5kfu.eps}
+\\[0.5cm]
+Rádióamatőr tanfolyamot segítő jegyzet, egyelőre kidolgozás alatt \\
+Összeállította: Szabó Áron, Kiss Ádám % Feel free to add yourself
+\\[1cm]
+
+{\huge \bfseries Forgalmazási ismeretek \\[2cm]}
+
+
+
+\end{center}
+
+\renewcommand{\contentsname}{Tartalom}\tableofcontents 
+\newpage
+\section{Felvezető}
+\subsection{Feszültség}
+Erő analógia
+\subsection{Áram}
+Sebesség, mozgás analógia
+
+\section{Ellenállás}
+\subsection{Ohm}
+\subsection{Teljesítmény, Joule-hő}
+\subsection{Frekvenciatartományban leírható viselkedés}
+\subsubsection{Ideális}
+\subsubsection{Valóságos}
+\subsection{Parazitajelenségek}
+Akkor beszélünk parazitajelenségről, ha az ellenállások által mutatott viselkedés, az őket leíró modell megjelenik egy olyan helyen, ahol fizikailag nem szándékoztunk ellenállást helyezni. Tipikus ellenpélda a vezeték, aminek az ellenállását nem hívjuk parazitajelenségnek. Az parazitaellenállásokat a gyakorlatban belső ellenállásnak vagy ESR-nek hívjuk. \par
+Egy savas akkumulátoron belül az elektródák ellenállása, illetve az elektrolit folyadék viszkozitása azt eredmnéyezi, hogy áram hatására azok melegszenek. Ezt a jelenséget úgy írhatjuk le, hogy a valóságos ekkumulátort egy ideális akkumulátorral és egy vele sorbakapcsolt ellenállásal írjuk le.
+
+
+\section{Induktivitás}
+Az induktivitásokkal azt írjuk le, ha egy térrész viselkedése leírható vagy modellezhető a lendület jelenségével. Erre példa egy egyszerű tekercs. Ha a tekercsre feszültséget kapcsolunk, akkor áram kezd el rajta folyni, melynek nagysága addig nő, amíg feszültséget kapcsolunk rá, azaz erőt fejtünk ki a töltéshordozókra (itt elektronok), energia áramlik a tekercsbe.
+\subsection{Koncentrált paraméterű induktivitások}
+lég- és vasmagos tekercsek \par
+fojtók
+\subsection{Rendszerelméleti modell, időtartománybeli leírás}
+\subsection{Frekvenciatartományban leírható viselkedés}
+\subsubsection{Ideálos}
+\subsubsection{Valóságos}
+\subsection{Parazitajelenségek}
+Parazitainduktivitás vagy belső induktivitás több helyen megjelenik. Például egy kellően hosszú vagy kis keresztmetszetű vezetőnek (főleg nagyobb frekvenciákon) számottevő az induktivitása. Ha egy sava akkumulátort vizsgálunk, ahol nehéz, nagy tömeggel rendelkező ionok mozgása adja az áramot, akkor azt mérhetjük, hogy hirtelen nagy áramfelvételt nem tud adni az akkumulátor, annak a kimenetén az áram szép lassan fut fel. Ezt úgy modellezhetjük, hogy az ideális akkumulátorunkkal sorbakötünk egy induktivitást, ezt tekintjük egy bővített, valóságot jobban leíró, modellnek.
+
+\section{Kapacitás}
+\subsection{Koncentrált paraméterű kapacitások}
+\subsubsection{Kerámiakodnenzátorok}
+A kondenzátorok iskolapéldái. Általánosságban két fegyvetzetből épülnek fel. A lemezek nagysága, illetve a köztük lévő távolság, valamint a két kodnenzátor közötti szakaszt kitöltő közeg meghatározza a kapacitást.
+%TODO kép furatszerelt kivitelről, illetve kapcsolási rajzbeli jelről
+Fontos, hogy ez a kodenzátor nem polarizált, azaz tetszőleges irányban ráadhatjuk a feszültséget. Általában nincs is túl nagy induktivitása ezeknek az elrednezéseknek. Ami fontos lehet, hogy a két fegyverzet közötti dielektrikum nem biztos, hogy magas frekvenciákon is működik, illetve a bizonyos frekvencia fölött a látszólagos kapacitás csökken, mivel a belső induktivitása válik dominánsá. Azt a frekvenciát, ahol a két hatás egyenlő, soros rezonanca frekvenciának hívjuk.
+\par A gyakorlatban szokásosan használt felületszerelt kondenzátorok úgynevezett MLCC kondenzátorok (Multi Layer Ceramia Capacitor). Ekkor több kerámiakondenzátort nyomtatnak egymás teletéjre, ezeket párhuzamba kacpsolják ezzel növelve a kapacitásukat. Ezzel a módszerrel néhány \( \mu F\) kapacitásig tudunk elmenni.
+\subsubsection{Elektrolitkondenzátorok}
+A kerámiakondenzátorokkal két probléma van. Az egyik miszerint nagy kapacitáshoz hatalmas felületre lenne szükség, a másik, hogy mégnagyobb kapacitás eléréséhez végtelenük kicsi távolságra. Ez a gyakorlatban már nem igen kivitelezhető. Egy olcsó és lehetséges alternatíva az elektrolit kodnenzátorok használata.
+\par Az alumínium elektrolit kondenzátorok esetében vesznek egy vékony alumínium lemezt, amit megmarnak, majd eloxálnak. A marás hatására megnő a felülete a fémnek. Így az első feltétlet telejsítettük egy nagyértékű kondenzátor építéséhez, azonban még nem hoztuk közel egymáshoz az elektródákat és nem is tettünk dielektrikumot a fegyverzetek közé. Elkóknál nem is teszünk dielektrikumot, a külső elektródáról a szabad töltésáramlást folyadék biztosítja. Ez befolyik a bemarások legkisebb részeibe is, teljesen kihasználva a felületet. Ezzel a módszerrel több százezer \( \mu F\) kapacitást is el tudunk érni. 
+\par A probléma ott van, hogy mivel egy elektrolit folyadékot használnuk vezetésre elektronok helyett, ezért itt se lesz elhanyagolható az induktivitás jelensége. További probléma, hogy az elektrolitok viszkozitása miatt, illetve a fegyverzetek véges vezetőképessége miatt egy ellenállás is bekerül a valóságot legjobban leíró helyettesítő képbe.
+\par Talán a legfelismerhetőbb tulajdonsága ezeknek a kodnenzátoroknak, hogy polarizáltak. Ha eltérő irányban feszítjük őket elő, mit az oldalán jelölt, akkor elektrolízissel leoldjuk a szigetelő réteget a belső elektródáról, majd az a vezető elektroliton keresztül közel zárlatot mutat majd a külső elektróda felé. A bent eldisszipált teljesítmény felforralja az elektrolitot, ami a kodnenzátor hangos eldurranásához vezet. 
+\par
+Az elektrolitkodnenzátorok áramköri jelölésében is eltérnek a poliraizálatlan kodnenzátoroktól.
+
+\subsubsection{Milyen kondenzátort használjak?}
+Elektrolitkondenzátorokban összességében nagyobb energiát tudunk tárolni, mint kerámiákban, de a frekvenciában felfele haldava (értsd, már \(15 kHz\) környékén is) erősen elkezdenek romlani a tulajdonságaik. Ezt általában azzal tudjuk valamennyire kompenzálni, hogy túlméretezzük ezt a kodnenzátort, a magas frekvenciákra habár fogy belőle, de még marad annyi, amennyit szeretnénk.
+\par Összességében elmondhatjuk, hogy minden kodnenzátor valamekkora frekvenciasávban működik jól. Elektrolitkodnenzátorral nem tudunk nagyfrekvenciás jeleket csatolni egyik áramkörből a másikba, de kerámiakodnenzátorral csak nagy térfogatban tudunk DC-n sok energiát eltárolni. Amennyiben tápszűrést szeretnénk csinálni, akkor vizsgáljuk meg, hogy milyen frekvenciáig működik az eszközünk, majd arra a frekvenciára helyezzünk el egy olyan kapacitást, aminek az impedanciája a terhelés tizede,
+így gyakorlatilag feszültségforrást mutat a kimenet fele. Majd innen felfele tízszeres léptékben helyezzünk el további kapacitásokat. Mindeközben ügyeljünk arra, hogy \(15 kHz\) fölött már "segítsük" az elektrolitkodnezátorokat kerámia kodnenzátorokkal, az impulzusválasza ezesetben például egy erősítőnek sokkal kevésbé lesz elkent.
+
+\subsubsection{Forgótárcsás kondenzátorok}
+\subsection{Rendszerelméleti modell, időtartománybeli leírás}
+\subsection{Frekvenciatartományban leírható viselkedés}
+\subsubsection{Ideálos}
+\subsubsection{Valóságos}
+\subsection{Parazitajelenségek}
+P
+
+\section{Reaktáns elemek megvalósítása tápvonallal}
+
+\end{document}
