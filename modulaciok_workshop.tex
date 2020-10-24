@@ -53,5 +53,25 @@ Rádióamatőr tanfolyamot segítő jegyzet, egyelőre kidolgozás alatt \\
 \renewcommand{\contentsname}{Tartalom}\tableofcontents 
 \newpage
 
+\newpage
+
+\section{Bevezető}
+A workshop célja bemutatni a különböző modulációs eljárások idő- és frekvenciatartománybeli viselkedését, illetve matematikai leírásukat. 
+
+\section{Előkészületek}
+A workshop Octave-ban és Matlab-ban is elvégezhető, a használt parancsok mindkettőben működőképesek.
+
+\paragraph{Octave telepítés:} 
+\begin{itemize}
+	\item \textbf{Linux parancs:} \textit{sudo apt-get install octave}
+	\item \textbf{Signal package telepítése:} Octave-on belül: \textit{pkg install -forge signal}\\
+	Ha ez valamiért nem működne, akkor command line-ból is telepítheted: \textit{sudo apt-get install octave-signal}
+\end{itemize}
+
+\section{Feladatok}
+
+\subsection{Szinusz jel generálása, ábrázolása}
+Első feladatunk egy szinusz jel generálása lesz, melyet a \textit{sin()} függvénnyel tehetünk meg. Fontos, hogy ez a függvény egy adott érték szinuszát adja vissza, nekünk viszont egy időtartománybeli függvényre van szükségünk. Létre kell hoznunk tehát az "időt", amit jelöljünk \textit{t}-vel. Erre egy intervallumot jelölünk ki: \textit{t=0:0.05:10}. Itt 0 az intervallum kezdete, 10 a vége, amelyet 0.05-ös lépésközzel járunk végig (hasonlóképpen lehetne pl. \textit{t=0:10}, ekkor az alapértelmezett lépésköz 1).\\
+Nézzük meg mit alkottunk a \textit{plot()} függvénnyel. Ha minden jól ment egy szinuszhoz hasonló jelalakot kapunk (ha nagyon torz, akkor lehet, hogy nem jól választottuk meg a lépésközt, vagy az intervallumot).
 
 \end{document}
