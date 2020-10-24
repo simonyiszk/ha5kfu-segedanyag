@@ -1,0 +1,57 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx}
+\usepackage{color}
+\usepackage[magyar]{babel}
+\usepackage{listings}
+\usepackage{float}
+
+\usepackage{enumerate}
+\usepackage{tikz}
+\usetikzlibrary{shapes,arrows}
+\usetikzlibrary{positioning}
+\usetikzlibrary{arrows.meta}
+
+\tikzset{
+block/.style = {draw, fill=white, rectangle, minimum height=3em, minimum width=3em},
+tmp/.style  = {coordinate}, 
+input/.style = {coordinate},
+output/.style= {coordinate},
+pinstyle/.style = {pin edge={to-,thin,black}
+}
+}
+\usepackage[siunitx]{circuitikz} 
+\renewcommand{\lstlistingname}{Lista}
+\usepackage[
+	pdftitle={HA5KFU tanfolyam - Modulációs workshop},
+	pdfauthor={HA5KFU Rádióamatőr Klub},
+	pdfsubject={HA5KFU tanfolyam},
+	pdfcreator={latex},
+	pdfkeywords={ },
+	pdfpagemode=UseOutlines,
+	pdfdisplaydoctitle=true,
+	pdflang=hu,
+	unicode
+]{hyperref}
+
+\pagestyle{plain}
+\sloppy
+\begin{document}
+\begin{center}
+\includegraphics[width=300pt,keepaspectratio]{figures/ha5kfu.eps}
+\\[0.5cm]
+Rádióamatőr tanfolyamot segítő jegyzet, egyelőre kidolgozás alatt \\
+Összeállította: Bazsó Márton, Szabó Áron % Feel free to add yourself
+\\[1cm]
+
+{\huge \bfseries Modulációs workshop \\[2cm]}
+
+
+
+\end{center}
+
+\renewcommand{\contentsname}{Tartalom}\tableofcontents 
+\newpage
+
+
+\end{document}
