@@ -297,6 +297,13 @@ Az IQ modulátornál egy komplex jellel moduláljuk a vivő frekvenciát. Ezzel 
 
 \subsubsection{Fázismoduláció}
 
+Vegyük át újra hogy is néz ki egy szinusz.
+\begin{equation}
+jel(t) = A \cdot \sin{ ( f\cdot t +  \phi   ) }
+\end{equation}
+A képletben lévő amplitúdót amplitúdó modilációban, a frekvenciát frekvenciamodulációban használjuk, a fázist pedig fázismodulációban. Talán a fázismodulációt a legnehezebb megfogni élettapasztalatból, mivel a fülünkkel nem halljuk ki a jelek fázisát -- furcsa is lenne ha egy méterrel távolabbról másnak hallanánk mások hangját. A fázis jelen esetben is nehezen értelmezhető, mivel a kiadott jel úgymond elveszik, nincs mihez hasonlítani első közelítésben majd vevő oldaon a fázist. A probléma feloldása az, hogy egyrészt eltárolhatjuk a jel mintáit majd vevőoldalon, illetve a fázist tudja majd a vevő a saját, azonos frekvencián futó oszcillátorához képest mérni. Különöböző frekvenciákhoz nincs értelme fázist mérni általában, mert a különböző frekvencia miatt fázisban úgyis elmásznak egymástól.
+\par
+
 Készítsünk fázismodulátort IQ moduláció segítségével! Legyen az átvinni kívánt (moduláló) jel $x(t)$ (ügyelve arra, hogy $\vert x(t) \vert<1$)! Ekkor a $c(t)$ komplex vektor hossza $\vert c(t) \vert = 1$, fázisa pedig a modulált jel pillanatnyi értéke ($\arg\left(c(t)\right)=x(t) \cdot \pi$). Így a jel 1 értéke a $\pi$ fázishoz kerül. A $c(t)$ jelet az Euler alakkal könnyen előállíthatjuk: $c(t)=e^{j \cdot \pi \cdot x(t)}$.
 
 \begin{figure}[H]
