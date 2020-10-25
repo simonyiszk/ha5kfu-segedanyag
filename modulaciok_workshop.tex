@@ -62,7 +62,7 @@ pinstyle/.style = {pin edge={to-,thin,black}
 \includegraphics[width=300pt,keepaspectratio]{figures/ha5kfu.eps}
 \\[0.5cm]
 Rádióamatőr tanfolyamot segítő jegyzet, egyelőre kidolgozás alatt \\
-Összeállította: Szabó Áron, Kiss Ádám, Bazsó Márton % Feel free to add yourself
+Szabó Áron HA1FLX, Kiss Ádám HA8KDA, Bazsó Márton HA7BM % Feel free to add yourself
 \\[1cm]
 
 {\huge \bfseries Modulációs gyakorlat \\[2cm]}
@@ -108,16 +108,17 @@ A keverés során semmi mást nem teszünk, mint próbáljuk felvenni a sebessé
 A koordináta-rendszert, amiben ábrázoljuk a lelassított szinusz, konstellációs diagramnak nevezzük. A vett jel (tfh. szinusz) vektorának a végpontját pedig konstellációs pontnak. Szokás a különböző konstellációs térnegyedekhez vagy ennél is finomabb felbontásokhoz digitális szimbólumokat is rendelni, amiket később (miután rászinkronizált a vevő az adó bitkibocsájtási ütemére) bitfolyamként tud értelmezni egy következő fokozat.
 
 \subsection{Egyszerű modulációk konstellációs ábrája}
-\subsubsection{AM}
+\paragraph{AM}
 Amplitúdó modulált esetben a konstellációs pont szöge áll, azonban az amplitúdója változik. Amennyiben a szög folyamatosan nő enyhén, úgy frekvencia-hibánk van az adóhoz képest, az oszcillátorunk frekvenciája kicsit más.
-\subsubsection{PM}
+\paragraph{PM}
 Fázismodulációnál az adó néha fázist vált a jelében, ekkor nálunk a lekevert/visszalassított szinuszban is lesz egy fázisugrás. Amennyiben az elvárt szimbólumok helyei itt is egy kör mentén vándorolnak, úgy frekvenciahibánk van.
-\subsection{FM}
+\paragraph{FM}
 Frekvenciamodulációnál nem szoktuk lekövetni pontosan a frekvenciaváltozását a jelnek. Azt nézzük, hogy épp milyen ütemben gyorsul el tőlünk, vagy lassul vissza hozzánk. Felírva szögfüggvényekkel, hogy épp mekkora szögsebessége van az FM jelnek (ehhez kell az előző vektor értéke is) számolható egy érték, amit megfelelő konstanssal (hangerő) megszorozva már demoduláltuk is a jelet. A frekvenciahiba itt egy konstans eltolást jelent majd a demodulált jelben. Hang esetén ezt nem halljuk ki.
 
 \subsection{IQ demodulátorok}
 Az IQ demodulátornál egy szinusz és egy koszinusz jellel is megszorozzuk a bejövő jelünket. A szinusznak és a koszinusznak a frekvenciája megegyezik. Feltételezve, hogy a felső keverési termékeket külön-külön kiszűrjük, megkapjuk a visszalassítós keverést. Az I és Q jelet lehet külön-külön digitalizálni, ezen a ponton már nem is szükséges nagyon gyors analógból digitális átalakítás, hiszen lassú jelekkel dolgozunk. Az I és Q jelek mint koordináták fogják megmutatni, hogy épp merre mutat a vett jel vektora, plusz a való életben valamekkora zaj is fog megjelenni ezen túl. Az IQ jelek digitálisan feldolgozhatóak, elvégezhető a demoduláció. Ezen az elven alapszik a gyakran használt RTL-SDR működése is, amivel például a SMOG jeleit is lehet fogni.
 
+\clearpage
 \section{Feladatok}
 
 \subsection{Szinusz jel generálása, ábrázolása}
@@ -125,7 +126,7 @@ Első feladatunk egy szinusz jel generálása lesz, melyet a \textit{sin()} füg
 
 Létre kell hoznunk tehát egy időtengelyt, aminek pontjaiban kiszámoljuk a függvény értékét. Ebből a szempontból fontos meghatározni a mintavételi frekvenciát ($F_s$), hiszen ebből az értékből számolható, hogy két minta közt mennyi idő fog eltelni. Válasszuk a mintavételi frekvenciát \textit{44 100 Hz}-re, ami a digitális audió jelfeldolgozásban használatos frekvencia, és a számítógép hangkártyáján könnyen lejátszható.
 
-Ha a minták számát ($N$) másodpercben szeretnénk megadni, egyszerűen szorozzuk meg a másodperc értéket a mintavételi frekvenciával. A másodperc időtengelyt ($t$) úgy kaphatjuk meg, ha az \texttt{1:N} sorozatot elemenként elosztjuk a mintavételi frekvenciával (a transzponálásra azért van szükség, hogy oszlopvektort kapjunk). Ez után a szinusz jel egyszerűen kiszámolható: mivel a szinusz egy periódusa $2\pi$, a szinuszjel pillanatnyi értékét $t \cdot f \cdot 2\pi$-re kell választani, ahol $f$ a szinusz frekvenciája.
+Ha a minta hosszát ($l$) másodpercben szeretnénk megadni, a minták számának ($N$) meghatározásához egyszerűen szorozzuk meg a másodperc értéket a mintavételi frekvenciával. A másodperc időtengelyt ($t$) úgy kaphatjuk meg, ha az \texttt{1:N} sorozatot elemenként elosztjuk a mintavételi frekvenciával (a transzponálásra azért van szükség, hogy oszlopvektort kapjunk). Ez után a szinusz jel egyszerűen kiszámolható: mivel a szinusz egy periódusa $2\pi$, a szinuszjel pillanatnyi értékét $t \cdot f \cdot 2\pi$-re kell választani, ahol $f$ a szinusz frekvenciája.
 
 \begin{lstlisting}[frame=single,language=matlab,caption=Mintavételi frekvencia beállítása és szinuszjel előállítása]
 Fs = 44100; % mintaveteli freki
@@ -299,11 +300,10 @@ Az IQ modulátornál egy komplex jellel moduláljuk a vivő frekvenciát. Ezzel 
 
 Vegyük át újra hogy is néz ki egy szinusz.
 \begin{equation}
-jel(t) = A \cdot \sin{ ( f\cdot t +  \phi   ) }
+y(t) = A \cdot \sin{ ( f\cdot t +  \phi   ) }
 \end{equation}
-A képletben lévő amplitúdót amplitúdó modilációban, a frekvenciát frekvenciamodulációban használjuk, a fázist pedig fázismodulációban. Talán a fázismodulációt a legnehezebb megfogni élettapasztalatból, mivel a fülünkkel nem halljuk ki a jelek fázisát -- furcsa is lenne ha egy méterrel távolabbról másnak hallanánk mások hangját. A fázis jelen esetben is nehezen értelmezhető, mivel a kiadott jel úgymond elveszik, nincs mihez hasonlítani első közelítésben majd vevő oldaon a fázist. A probléma feloldása az, hogy egyrészt eltárolhatjuk a jel mintáit majd vevőoldalon, illetve a fázist tudja majd a vevő a saját, azonos frekvencián futó oszcillátorához képest mérni. Különöböző frekvenciákhoz nincs értelme fázist mérni általában, mert a különböző frekvencia miatt fázisban úgyis elmásznak egymástól.
-\par
-
+A képletben lévő amplitúdót amplitúdómodulációban, a frekvenciát frekvenciamodulációban használjuk, a fázist pedig fázismodulációban. Talán a fázismodulációt a legnehezebb megfogni élettapasztalatból, mivel a fülünkkel nem halljuk ki a jelek fázisát -- furcsa is lenne ha egy méterrel távolabbról másnak hallanánk mások hangját. A fázis jelen esetben is nehezen értelmezhető, mivel a kiadott jel úgymond elveszik, nincs mihez hasonlítani első közelítésben majd vevő oldalon a fázist. A probléma feloldása az, hogy egyrészt eltárolhatjuk a jel mintáit majd vevőoldalon, illetve a fázist tudja majd a vevő a saját, azonos frekvencián futó oszcillátorához képest mérni. Különböző frekvenciákhoz nincs értelme fázist mérni általában, mert a különböző frekvencia miatt fázisban úgyis elmásznak egymástól.
+\clearpage
 Készítsünk fázismodulátort IQ moduláció segítségével! Legyen az átvinni kívánt (moduláló) jel $x(t)$ (ügyelve arra, hogy $\vert x(t) \vert<1$)! Ekkor a $c(t)$ komplex vektor hossza $\vert c(t) \vert = 1$, fázisa pedig a modulált jel pillanatnyi értéke ($\arg\left(c(t)\right)=x(t) \cdot \pi$). Így a jel 1 értéke a $\pi$ fázishoz kerül. A $c(t)$ jelet az Euler alakkal könnyen előállíthatjuk: $c(t)=e^{j \cdot \pi \cdot x(t)}$.
 
 \begin{figure}[H]
@@ -331,11 +331,12 @@ N = l * Fs; % mintak szama
 t = ( 1:N )' ./ Fs; % Ido oszlopvektora
 
 f = 5; % eredeti jel frek
-x =  sin( t * f * pi ) .* 0.5; % ez lesz az atvinni kivant jel (1/2 amplitudo)
+x =  sin( t * f * 2 * pi ) .* 0.5; % ez lesz az atvinni kivant jel (1/2 amplitudo)
 
 c = ones(N,1); % N meretu vektor letrehozasa es feltoltese 1-essel
 for i=1:N
-  c(i) = exp( j * 2 * pi * x(i) ); % fazismodulalt jel letrehozasa
+  c(i) = exp( j * pi * x(i) ); % fazismodulalt jel letrehozasa
+  % e^(2pi*j*x/2), mert nem szeretnenk a korbeforgassal atlapolodni
 end
 
 fo = 3000; % oszcillator frek
