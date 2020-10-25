@@ -206,8 +206,8 @@ b = sin( t * f * 2 * pi );
 m = 0.75; % modulacios index
 dc_offset = (1 + 1-m) * max(a);
 a_dc = a + dc_offset; % dc eltolas
-y = a_dc .* b; % a .* b
 
+y = a_dc .* b; % keverés (a .* b)
 
 wf(y, Fs);
 \end{lstlisting}
