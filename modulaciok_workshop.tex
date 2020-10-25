@@ -121,8 +121,9 @@ plot( t, y );
 
 A 20 Hz-es jelet könnyen ábrázoltuk, de a hallható tartomány magasabb frekvencián van. Változtassuk a frekvenciát 440 Hz-re (zenei A hang), és játsszuk ki a számítógép hangkártyáján a jelet: \\
 \texttt{soundsc(y, Fs); } \\
-Itt már több információt kapnánk a jelről, ha frekvenciatartományban, vízesés diagramon ábrázolnánk a jelet. A HA5KFU Octave gyakorlathoz csomagolt \textit{wf(y, Fs)} függvénnyel ezt a rádiózásban megszokott formában rajzolhatjuk ki.
+Itt már több információt kapnánk a jelről, ha frekvenciatartományban, vízesés diagramon ábrázolnánk a jelet. A HA5KFU Octave gyakorlathoz csomagolt \textit{wf(y, Fs)} függvénnyel ezt a rádiózásban megszokott formában rajzolhatjuk ki. 
 
+\lstinline{wf(y, Fs); % Vizeses diagram kirajzolasa }  \\
 \begin{figure}[H]
 \begin{center}
 \includegraphics[width=8cm]{figures/modulaciok_workshop_waterfall.eps}
@@ -138,10 +139,115 @@ A vízesés diagram 0-tól a mintavételi frekvencia feléig ábrázolja a frekv
 \\
 Megpróbálhatunk fehér zajt generálni, vagy hangfilet betölteni is. \\
 \lstinline{y = rand( N, 1 ) ; % N elemu zaj}  \\
-\lstinline{[y,Fs] = audioread('akkord.wav'); % WAV file beolvasasa}
+\lstinline{[y,Fs] = audioread( 'akkord.wav' ); N = length( y );% WAV file beolvasasa}
+
 
 \clearpage
 
 \subsection{Keverés}
 
+
+\begin{figure}[H]
+\label{fig:keverok}
+\centering
+\begin{tikzpicture}
+
+	\draw
+	(5,0)node[bnc, xscale=-1] (bnc){}	
+	(0,0) to[loudspeaker, name=M] ++(0,2)
+	(1.2,1.7) node[label={[font=\footnotesize]above:Bemenő jel}] {}
+
+	(3,-2.5) node[label={[font=\footnotesize]below:$f_o=$10 kHz}] {}
+	
+	(3,0.5) node[label={[font=\footnotesize]above:Keverő}] {}
+	(5.5,0.5) node[label={[font=\footnotesize]above:Kimenet}] {}
+	
+	(0,0)[loudspeaker]node(mic){}
+	(3,0)[mixer] node(mix){}	
+	
+	(3.5,-2)[oscillator] node(osc){}	
+	(mic) to [short] ++(2.5,0) 
+	(3,-1.5) to [short] (3,-0.5)
+	(3.5,0) to [short] (5,0)
+	
+	;
+    \end{tikzpicture}
+\caption{
+A keverő blokkvázlata} 
+\end{figure}
+
+Amikor egy jelet egy szinusz oszcillátor jelével keverünk (szorzunk), a jel megjelenik a frekvenciatartományban a két frekvencia összegeként és különbségeként. Ha pl a két jel egy $\omega_1$ frekvenciájú koszinusz vivő, és egy $\omega_2$ frekvenciájú koszinusz moduláló jel, a modulációs tétel alapján:
+
+\begin{equation}
+\cos(\omega_1t) \cdot \cos(\omega_2t) = \frac{1}{2}\cos(\omega_1t+\omega_2t) +  \frac{1}{2}\cos(\omega_1t - \omega_2t)
+\end{equation}
+
+Nézzük meg a gyakorlatban, próbáljuk meg az \textit{akkord.wav} hangfilet keverni, például egy 10 kHz-es szinusz jellel!
+
+
+\begin{lstlisting}[frame=single,language=matlab,caption=Keverés]
+[a,Fs] = audioread('akkord.wav'); N=length(a);
+f = 10000; % 10 kHz-es lesz a vivo jel
+t = ( 1:N )' ./ Fs;
+b = sin( t * f * 2 * pi );
+
+y = a.*b;
+
+wf(y, Fs);
+\end{lstlisting}
+
+Vajon hogyan kapjuk vissza a kevert jelből az eredeti információt?
+
+\clearpage
+
+\subsection{IQ moduláció}
+
+
+
+\begin{figure}[H]
+\label{fig:iq}
+\centering
+\begin{tikzpicture}
+
+	\draw
+	(10,-3)node[bnc, xscale=-1] (bnc){}	
+	(-1,-3) node[label={[font=\footnotesize]above:Komplex bemenet}] {}
+	
+	(3.7,-1.5) node[label={[font=\footnotesize]below:Helyi oszcillátor ($f_o$)}] {}
+	(4,-3.5) node[label={[font=\footnotesize]below:$\frac{\pi}{2}$ fázisforgatás}] {}
+	(3,0.5) node[label={[font=\footnotesize]above:I (In-phase)}] {}
+	(3,-7) node[label={[font=\footnotesize]above:Q (Quadrature)}] {}
+	(10.5,-3) node[label={[font=\footnotesize]above:Kimenet}] {}
+	
+	(0, -3) to [short] ++(1,0) 
+	(1,-3) to [short] ++(0,3) to [short, i=$\Re$] ++(4.5,0) 
+	(1,-3) to [short] ++(0,-3) to [short, i=$\Im$] ++(4.5,0) 	
+	
+	(6,-1.5) to [short, i=\footnotesize $\cos(2\pi \cdot f_o \cdot t)$] (6,-0.5)
+	
+	(6,-2.5) to [short, i=\phantom{}] (6,-3.5)
+	
+	(6,-4.5) to [short, i>_=\footnotesize $-\sin(2\pi \cdot f_o \cdot t)$] (6,-5.5)
+	
+	(6.5,0) to [short] ++(2.5,0) to [short, i=\phantom{}] ++(0,-2.5) 
+	(6.5,-6) to [short] ++(2.5,0) to [short, i=\phantom{}] ++(0,2.5) 
+	(9.5,-3) to [short] ++(0.5,0)
+	(6,0)[mixer] node(mixa){}	
+	(6,-6)[mixer] node(mixb){}	
+	
+
+	(6.5,-2)[oscillator] node(osc){}	
+	(6,-4)[phaseshiftershape] node(phas){}	
+	
+	(9,-3)[adder] node(add){}	
+	
+	;
+    \end{tikzpicture}
+\caption{
+Az IQ modulátor blokkvázlata} 
+\end{figure}
+
 \end{document}
+
+
+
