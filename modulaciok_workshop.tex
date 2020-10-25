@@ -62,7 +62,7 @@ pinstyle/.style = {pin edge={to-,thin,black}
 \includegraphics[width=300pt,keepaspectratio]{figures/ha5kfu.eps}
 \\[0.5cm]
 Rádióamatőr tanfolyamot segítő jegyzet, egyelőre kidolgozás alatt \\
-Összeállította: Bazsó Márton, Szabó Áron % Feel free to add yourself
+Összeállította: Szabó Áron % Feel free to add yourself
 \\[1cm]
 
 {\huge \bfseries Modulációs gyakorlat \\[2cm]}
@@ -305,7 +305,7 @@ Ez alapján készítsünk el egy FM modulátort! Nagyon hasonlít az előzőhöz
 
 \subsection{Újramintavételezés}
 
-Próbáljuk ki hangfilekkal! Ügyeljünk arra, hogy a FM sávszélessége nagy lesz, ezért nagyobb helyre lesz szükségünk a frekvenciatartományban. Ha megváltoztatjuk a mintavételi frekvenciát és a hangot újramintavételezzük ez alapján, ki tudjuk terjeszteni a frekvenciatartomány méretét. \\
+Próbáljuk ki hangfileokkal! Ügyeljünk arra, hogy a FM sávszélessége nagy lesz, ezért nagyobb helyre lesz szükségünk a frekvenciatartományban. Ha megváltoztatjuk a mintavételi frekvenciát és a hangot újramintavételezzük ez alapján, ki tudjuk terjeszteni a frekvenciatartomány méretét. \\
 Vigyázzunk, hogy $n$-szeres mintavételi frekvenciánál a minták száma is $n$-szeresére változik, és ez nagyon megnövelheti a számítási időt. \\
 Az újramintavételezés a \textit{resample(x, p, q)} függvénnyel tehető meg, ami $\frac{p}{q}$-szorosára változtatja a mintavételi frekvenciát (ehhez be kell tölteni a signal csomagot). Ne felejtsük a $F_s$ változót is beállítani!
 \begin{lstlisting}[frame=single,language=matlab,caption=Újramintavételezés]
