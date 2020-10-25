@@ -119,11 +119,15 @@ plot( t, y );
 \end{center}
 \end{figure}
 
-A 20 Hz-es jelet könnyen ábrázoltuk, de a hallható tartomány magasabb frekvencián van. Változtassuk a frekvenciát 440 Hz-re (zenei A hang), és játsszuk ki a számítógép hangkártyáján a jelet: \\
-\texttt{soundsc(y, Fs); } \\
+A 20 Hz-es jelet könnyen ábrázoltuk, de a hallható tartomány magasabb frekvencián van. Változtassuk a jel frekvenciáját 440 Hz-re (zenei A hang), és játsszuk ki a számítógép hangkártyáján a jelet:
+
+\lstinline{soundsc(y, Fs); % Hang lejatszasa Fs mintaveteli frekvenciaval } 
+
+
 Itt már több információt kapnánk a jelről, ha frekvenciatartományban, vízesés diagramon ábrázolnánk a jelet. A HA5KFU Octave gyakorlathoz csomagolt \textit{wf(y, Fs)} függvénnyel ezt a rádiózásban megszokott formában rajzolhatjuk ki. 
 
-\lstinline{wf(y, Fs); % Vizeses diagram kirajzolasa }  \\
+\lstinline{wf(y, Fs); % Vizeses diagram kirajzolasa }  
+
 \begin{figure}[H]
 \begin{center}
 \includegraphics[width=8cm]{figures/modulaciok_workshop_waterfall.eps}
@@ -139,7 +143,7 @@ A vízesés diagram 0-tól a mintavételi frekvencia feléig ábrázolja a frekv
 \\
 Megpróbálhatunk fehér zajt generálni, vagy hangfilet betölteni is. \\
 \lstinline{y = rand( N, 1 ) ; % N elemu zaj}  \\
-\lstinline{[y,Fs] = audioread( 'akkord.wav' ); N = length( y );% WAV file beolvasasa}
+\lstinline{[y,Fs] = audioread( 'akkord.wav' ); N = length( y ); l=N/Fs; % WAV file beolvasasa}
 
 
 \clearpage
@@ -154,7 +158,7 @@ Megpróbálhatunk fehér zajt generálni, vagy hangfilet betölteni is. \\
 
 	\draw
 	(5,0)node[bnc, xscale=-1] (bnc){}	
-	(0,0) to[loudspeaker, name=M] ++(0,2)
+	(0,0) to[mic, name=M] ++(0,2)
 	(1.2,1.7) node[label={[font=\footnotesize]above:Bemenő jel}] {}
 
 	(3,-2.5) node[label={[font=\footnotesize]below:$f_o=$10 kHz}] {}
@@ -162,7 +166,7 @@ Megpróbálhatunk fehér zajt generálni, vagy hangfilet betölteni is. \\
 	(3,0.5) node[label={[font=\footnotesize]above:Keverő}] {}
 	(5.5,0.5) node[label={[font=\footnotesize]above:Kimenet}] {}
 	
-	(0,0)[loudspeaker]node(mic){}
+	(0,0)[mic]node(mic){}
 	(3,0)[mixer] node(mix){}	
 	
 	(3.5,-2)[oscillator] node(osc){}	
@@ -246,6 +250,71 @@ Vajon hogyan kapjuk vissza a kevert jelből az eredeti információt?
 \caption{
 Az IQ modulátor blokkvázlata} 
 \end{figure}
+
+Az IQ modulátornál egy komplex jellel moduláljuk a vivő frekvenciát. Ezzel a módszerrel az alapsávi jelet egy komplex fazorként ábrázolhatjuk, és ez nagyban megkönnyíti a modulációs műveletek elvégzését.
+
+\subsubsection{Fázismoduláció}
+
+Készítsünk fázismodulátort IQ moduláció segítségével! Legyen az átvinni kívánt (moduláló) jel $x(t)$ (ügyelve arra, hogy $\vert x(t) \vert<1$)! Ekkor a $c(t)$ komplex vektor hossza $\vert c(t) \vert = 1$, fázisa pedig a modulált jel pillanatnyi értéke ($\arg(c(t))=x(t) \cdot 2 \pi$). A $c(t)$ jelet az Euler alakkal könnyen előállíthatjuk: $c(t)=e^{j \cdot 2\pi \cdot x(t)}$.
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=13cm]{figures/modulaciok_workshop_pm.eps}
+\caption{Fázisok előállítása a moduláló jelből}
+\label{fig:pm}
+\end{center}
+\end{figure}
+
+Az IQ keveréshez ennek a komplex jelnek a valós részét az in-phase $\cos(2\pi \cdot f_o \cdot t)$, a képzetes részét a quadrature $-\sin(2\pi \cdot f_o \cdot t)$ oszcillátor jellel moduláljuk (szorozzuk), majd összeadjuk. Kész is a modulált jel!
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=8cm]{figures/modulaciok_workshop_phase.eps}
+\caption{Az előállított fázismodulált jel}
+\label{fig:phase}
+\end{center}
+\end{figure}
+\clearpage
+\begin{lstlisting}[frame=single,language=matlab,caption=Fázismoduláció IQ modulátorral]
+Fs = 44100; % mintaveteli freki
+l = 1.5; % minta hossza masodpercben
+N = l * Fs; % mintak szama
+t = ( 1:N )' ./ Fs; % Ido oszlopvektora
+
+f = 5; % eredeti jel frek
+x =  sin( t * f * 2 * pi ) .* 0.5; % ez lesz az atvinni kivant jel (1/2 amplitudo)
+
+c = ones(N,1); % N meretu vektor letrehozasa es feltoltese 1-essel
+for i=1:N
+  c(i) = exp( j * 2 * pi * x(i) ); % fazismodulalt jel letrehozasa
+end
+
+fo = 3000; % oszcillator frek
+oi =  cos( t * fo * 2 * pi ); % in-phase oszcillator
+oq = -sin( t * fo * 2 * pi ); % quadrature oszcillator
+
+y = oq .* imag(c) + oi .* real(c); % IQ keveres
+
+figure(1);
+plot(t, y);
+figure(2);
+wf(y, Fs);
+\end{lstlisting}
+
+Ez alapján készítsünk el egy FM modulátort! Nagyon hasonlít az előzőhöz, csak itt a komplex vektor forgásának frekvenciája változik.
+
+\subsection{Újramintavételezés}
+
+Próbáljuk ki hangfilekkal! Ügyeljünk arra, hogy a FM sávszélessége nagy lesz, ezért nagyobb helyre lesz szükségünk a frekvenciatartományban. Ha megváltoztatjuk a mintavételi frekvenciát és a hangot újramintavételezzük ez alapján, ki tudjuk terjeszteni a frekvenciatartomány méretét. \\
+Vigyázzunk, hogy $n$-szeres mintavételi frekvenciánál a minták száma is $n$-szeresére változik, és ez nagyon megnövelheti a számítási időt. \\
+Az újramintavételezés a \textit{resample(x, p, q)} függvénnyel tehető meg, ami $\frac{p}{q}$-szorosára változtatja a mintavételi frekvenciát. Ne felejtsük a $F_s$ változót is beállítani!
+\begin{lstlisting}[frame=single,language=matlab,caption=Újramintavételezés]
+[x,Fs] = audioread('stronger2.wav');
+% Ujramintavetelezes -> nagyobb frekitartomany
+Fs = Fs * 4;
+x = resample(x, 4, 1);
+N = length( x ); l = N / Fs;
+\end{lstlisting}
 
 \end{document}
 
