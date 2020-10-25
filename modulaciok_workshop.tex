@@ -164,14 +164,22 @@ Megpróbálhatunk fehér zajt generálni, vagy hangfilet betölteni is. \\
 	(3,-2.5) node[label={[font=\footnotesize]below:$f_o=$10 kHz}] {}
 	
 	(3,0.5) node[label={[font=\footnotesize]above:Keverő}] {}
+	(1.5,0.5) node[label={[font=\footnotesize]above:Eltolás}] {}
 	(5.5,0.5) node[label={[font=\footnotesize]above:Kimenet}] {}
-	
+	(1.5,-2.5) node[label={[font=\footnotesize]above:DC}] {}
 	(0,0)[mic]node(mic){}
 	(3,0)[mixer] node(mix){}	
 	
+	(1.5,0)[adder] node(add){}	
 	(3.5,-2)[oscillator] node(osc){}	
-	(mic) to [short] ++(2.5,0) 
+	(1.5,-2)[twoportshape] node(dc){}
+	
+	
+	(mic) to [short] ++(1,0) 
+	
+	(2,0) to [short] ++(0.5,0) 
 	(3,-1.5) to [short] (3,-0.5)
+	(1.5,-1.5) to [short] (1.5,-0.5)
 	(3.5,0) to [short] (5,0)
 	
 	;
@@ -203,6 +211,8 @@ y = a_dc .* b; % a .* b
 
 wf(y, Fs);
 \end{lstlisting}
+
+Fontos, hogy eltoljuk az eredeti jelet úgy, hogy a moduláló jel ne menjen 0 szint alá, különben túlmoduláljuk a vivő jelet. A vivő és moduláló jel amplitúdójának kapcsolatát a modulációs mélységgel jellemezzük. 
 
 Vajon hogyan kapjuk vissza a kevert jelből az eredeti információt?
 
