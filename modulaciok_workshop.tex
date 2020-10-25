@@ -195,7 +195,11 @@ f = 10000; % 10 kHz-es lesz a vivo jel
 t = ( 1:N )' ./ Fs;
 b = sin( t * f * 2 * pi );
 
-y = a.*b;
+m = 0.75; % modulacios index
+dc_offset = (1 + 1-m) * max(a);
+a_dc = a + dc_offset; % dc eltolas
+y = a_dc .* b; % a .* b
+
 
 wf(y, Fs);
 \end{lstlisting}
@@ -255,7 +259,7 @@ Az IQ modulátornál egy komplex jellel moduláljuk a vivő frekvenciát. Ezzel 
 
 \subsubsection{Fázismoduláció}
 
-Készítsünk fázismodulátort IQ moduláció segítségével! Legyen az átvinni kívánt (moduláló) jel $x(t)$ (ügyelve arra, hogy $\vert x(t) \vert<1$)! Ekkor a $c(t)$ komplex vektor hossza $\vert c(t) \vert = 1$, fázisa pedig a modulált jel pillanatnyi értéke ($\arg(c(t))=x(t) \cdot 2 \pi$). A $c(t)$ jelet az Euler alakkal könnyen előállíthatjuk: $c(t)=e^{j \cdot 2\pi \cdot x(t)}$.
+Készítsünk fázismodulátort IQ moduláció segítségével! Legyen az átvinni kívánt (moduláló) jel $x(t)$ (ügyelve arra, hogy $\vert x(t) \vert<1$)! Ekkor a $c(t)$ komplex vektor hossza $\vert c(t) \vert = 1$, fázisa pedig a modulált jel pillanatnyi értéke ($\arg\left(c(t)\right)=x(t) \cdot \pi$). Így a jel 1 értéke a $\pi$ fázishoz kerül. A $c(t)$ jelet az Euler alakkal könnyen előállíthatjuk: $c(t)=e^{j \cdot \pi \cdot x(t)}$.
 
 \begin{figure}[H]
 \begin{center}
@@ -282,7 +286,7 @@ N = l * Fs; % mintak szama
 t = ( 1:N )' ./ Fs; % Ido oszlopvektora
 
 f = 5; % eredeti jel frek
-x =  sin( t * f * 2 * pi ) .* 0.5; % ez lesz az atvinni kivant jel (1/2 amplitudo)
+x =  sin( t * f * pi ) .* 0.5; % ez lesz az atvinni kivant jel (1/2 amplitudo)
 
 c = ones(N,1); % N meretu vektor letrehozasa es feltoltese 1-essel
 for i=1:N
@@ -309,7 +313,7 @@ Próbáljuk ki hangfileokkal! Ügyeljünk arra, hogy a FM sávszélessége nagy 
 Vigyázzunk, hogy $n$-szeres mintavételi frekvenciánál a minták száma is $n$-szeresére változik, és ez nagyon megnövelheti a számítási időt. \\
 Az újramintavételezés a \textit{resample(x, p, q)} függvénnyel tehető meg, ami $\frac{p}{q}$-szorosára változtatja a mintavételi frekvenciát (ehhez be kell tölteni a signal csomagot). Ne felejtsük a $F_s$ változót is beállítani!
 \begin{lstlisting}[frame=single,language=matlab,caption=Újramintavételezés]
-[x,Fs] = audioread('stronger2.wav');
+[x,Fs] = audioread('voice.wav');
 % Ujramintavetelezes -> nagyobb frekitartomany
 Fs = Fs * 4;
 x = resample(x, 4, 1);
