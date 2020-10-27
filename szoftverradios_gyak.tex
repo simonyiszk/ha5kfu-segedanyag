@@ -175,6 +175,37 @@ int main()
 }
 \end{lstlisting}
 
+\subsection{Deriválás}
+
+$\arctan$ deriválási szabálya:
+\begin{equation}
+\left( \arctan \left( x \right) \right)' = \frac{1}{1 + x^2}
+\end{equation}
+$\frac{f}{g}$ deriválási szabálya:
+\begin{equation}
+\left( \frac{f}{g} \right)' = \frac{ f' \cdot g - f  \cdot  g'}{g^2}
+\end{equation}
+$f(g(x))$ deriválási szabálya:
+\begin{equation}
+\left( f(g(x)) \right)' = f'(g(x)) \cdot g'(x)
+\end{equation}
+\vspace{20pt}
+
+$\arctan \left( \frac{q}{i} \right)$ deriválása:
+\begin{equation}
+\frac{\partial}{\partial t}\left( \arctan \left( \frac{q}{i} \right) \right) = 
+\end{equation}
+\begin{equation}
+\frac{1}{1 + \left( \frac{q}{i} \right)^2} \cdot \frac{\frac{\partial q}{\partial t} \cdot i - q  \cdot \frac{\partial i}{\partial t}}{i^2} =
+\end{equation}
+\begin{equation}
+\frac{\frac{\partial q}{\partial t} \cdot i - q  \cdot \frac{\partial i}{\partial t}}{\left( 1 + \frac{q^2}{i^2} \right) \cdot i^2 } 
+=
+\end{equation}
+\begin{equation}
+\frac{i \cdot \frac{\partial q}{\partial t} - q \cdot \frac{\partial i}{\partial t}}{i^2 + q^2}
+\end{equation}
+
 \end{document}
 
 
