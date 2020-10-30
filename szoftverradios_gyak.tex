@@ -102,15 +102,16 @@ A gyakorlathoz Linux operációs rendszerre lesz szükség.
 \section{Elméleti összefoglaló}
 
 
-\subsection{IQ demodulátorok}
-Az IQ demodulátornál egy szinusz és egy koszinusz jellel is megszorozzuk a bejövő jelünket. A szinusznak és a koszinusznak a frekvenciája megegyezik. Feltételezve, hogy a felső keverési termékeket külön-külön kiszűrjük, megkapjuk a visszalassítós keverést. Az I és Q jelet lehet külön-külön digitalizálni, ezen a ponton már nem is szükséges nagyon gyors analógból digitális átalakítás, hiszen lassú jelekkel dolgozunk. Az I és Q jelek mint koordináták fogják megmutatni, hogy épp merre mutat a vett jel vektora, plusz a való életben valamekkora zaj is fog megjelenni ezen túl. Az IQ jelek digitálisan feldolgozhatóak, elvégezhető a demoduláció. Ezen az elven alapszik a gyakran használt RTL-SDR működése is, amivel például a SMOG jeleit is lehet fogni.
-
-\clearpage
-\section{Feladatok}
-
 \subsection{IQ demodulátor}
+Az IQ demodulátor egy szoftverrádiós eszközöben gyakran használt demodulátor.
+Ilyen hardver található a gyakorlaton használt RTL-SDR USB stickben is.
+Az IQ demodulátorban a bejövő jelet két azonos frekvenciájú, de 90°-kal eltolt jellel keverjük le (\ref{fig:iq}. ábra). 
+A felső keverési termékekeket egy low-pass filterrel kiszűrjük, íg kapjuk az I (in phase) és a Q (quadrature) jeleket.
 
-
+Ezen jeleknek a frekvenciája a helyi oszicillátor és a vett jel frekvenciájának különbsége lesz.
+Az I és Q jelet lehet külön-külön digitalizálni, ezen a ponton már nem szükséges nagyon gyors analóg-digitális átalakítás, hiszen alacsony frekvenciájú jelekkel dolgozunk. 
+Az I és Q jelet együtt, mint $I + jQ$ komplex jelet értelmezzük.
+Ez már digitálisan feldolgozható, elvégezhető a demoduláció. 
 
 \begin{figure}[H]
 \label{fig:iq}
@@ -155,6 +156,50 @@ Az IQ demodulátornál egy szinusz és egy koszinusz jellel is megszorozzuk a be
 Az IQ demodulátor egyszerűsített blokkvázlata} 
 \end{figure}
 
+\subsection{Komplex jelek}
+
+A komplex jelek szoftveres feldolgozása gyakran könnyebb, mint a csak valós számokból állóké.
+Az eredeti vett jel szinuszos komponensei komplex szinuszoidként jelennek meg.
+
+A komplex szinuszoidok a következő alakot veszik fel:
+\[
+  A e^{j(\phi +  2 \pi f t)} = A ( \cos (\phi + 2 \pi f t)  +  j \sin (\phi + 2 \pi f t))
+\]
+Az IQ vektorokat ábrázolva ezeket $A$ hosszúságú $f$ frekvenciával az origó körül körbeforgó vektorokként fogjuk látni.
+$A$ arányos a jel amplitudójával, $f$ pedig a helyi oszcillátor és a vett komponens frekvenciája közötti eltérés.
+
+Amennyiben a vizsgált komponens frekvenciája nagyobb volt, mint a helyi oszcillátoré, $f$ pozitív lesz, tehát az IQ vektor
+az óramutató járásával ellentétesen forog.
+Ha a vizsgált komponens frekvenciája kisebb volt, mint a helyi oszcillátoré, $f$ negatív lesz, tehát az IQ vektor
+az óramutató járásával megegyezően forog.
+
+Ha az LO és a vett komponens frekvenciája megegyezik $f$ 0 lesz, így a demodulált IQ vektor konstans.
+Ilyenkor $\phi$ az LO és a vett jel közötti fáziseltérés.
+(Általánosságban a $\phi + 2\pi ft$ kifejezés értelmezhető a két jel fáziseltéréseként, azonban ez időben változó, ha azok nem azonos frekvenciájúak.)
+
+
+\subsection{Frekvencia moduláció}
+
+Frekvencia modulációnál egy vivő jel frekvenciájába kódoljuk az $x_m(t)$ moduláló jel által hordozott információt. Az $y(t)$ sugárzott jelünket a következő képpen számolhatjuk ki:
+\[
+  y(t) = A \cos(2 \pi t ( f_c + f_{\Delta} x(t) ) )
+\]
+Itt $A$ az amplitudónk, $f_c$ a közép frekvenciánk, ez a "vivő eredeti frekvenciája", illetve az állomás névleges frekvenciája (pl. 97.1 MHz). 
+$f_{\Delta}$ a frekvencialöket, $\pm 1$ közé normált moduláló jelnél az kimeneti jel energiájának nagy része $f_c \pm f_{\Delta}$ közé esik.
+
+\clearpage
+\section{Feladatok}
+
+\subsection{FM demoduláció}
+
+A feladathoz egy RTL-SDR hardvert fogunk felhasználni.
+Az USB stick a digitalizált IQ jelet egy bytestreamként küldi: egy 1 byte-os I majd egy 1 byte-os Q mintát küld felváltva.
+A 8 bites minták offszettel ábrázolják a negatív értékeket.
+A bytestreamet a demoduláló programunk a standard inputon fogja megkapni, majd a standard outra kell, hogy kiadja az abból kiszámolt hangmintát.
+
+Segítségképpen a minta beolvasást, illetve kiírás már szerepel a kiinduló kódban.
+A fogadott IQ jel magasabb mintavételi rátával fog jönni, mint amit a hangkártya kezelni tud, azonban ezt egy külső programmal a demoduláció után fogjuk csökkenteni.
+Ezért minden fogadott IQ mintára pontosan egy hangmintát kell a programnak kiadni.
 
 \begin{lstlisting}[frame=single,language=c,caption=Kiinduló kód]
 #include <math.h>
@@ -163,17 +208,44 @@ Az IQ demodulátor egyszerűsített blokkvázlata}
 int main()
 {
 	double i, q, s;
-	for(;;)
+	for(;;) //vegtelen ciklus
 	{
+                // beolvassuk az I mintat, az offszetet levonjuk, hogy a 0 tenyleg 0 legyen
 		i=((unsigned char)getchar()-127); 
-		q=((unsigned char)getchar()-127);
-		
+                // Q-val ugyan ez
+		q=((unsigned char)getchar()-127); //bolvassuk
+	
+                // s-be kell kiszamolni a demodulalt hangot
+                // a kiiras miatt s-t ugy kell skalazni hogy kb. -127 es 128 koze essen.
 		// s = ??;
 
+                // s-t visszaalakitjuk offszetese majd kiirjuk
 		putchar((unsigned char)(s+127));
 	}
 }
 \end{lstlisting}
+
+A programot a saját hardverrel következő parancssorral lehet futtatni:
+\begin{lstlisting}[frame=single,language=bash]
+ rtl_sdr -s 240000 -f 89500000 -g 20 - | tcc -lm -run minidemod-wfm.c | sox -t raw -r 240000 -e unsigned -b 8 -c 1 - -t raw - rate 48000 | aplay -f U8 -c1 -r 48000 --buffer-size=200000
+\end{lstlisting}
+
+Ha nincs saját hardvered használhatod a Kafu \texttt{rtl\_mus} szerverét ezzel a paranccsal:
+\begin{lstlisting}[frame=single,language=bash]
+nc teto.sch.bme.hu 7373 | tcc -lm -run minidemod-wfm.c | sox -t raw -r 240000 -e unsigned -b 8 -c 1 - -t raw - rate 48000 | aplay -f U8 -c1 -r 48000 --buffer-size=200000
+\end{lstlisting}
+
+Mindkét parancssorban az egyes programokat a \texttt{|} (pipe) karakter választja el, ami azt jelzi a shellnek,
+hogy a balra lévő program standard outját adja át a jobbra lévő program standard injére.
+
+Az \texttt{rtl\_sdr} program az USB stickről olvas mintákat, amiket a standard outra ír. A -s kapcsoló a mintavételi rátát, a -f a helyi oszcillátor frekvenciáját, a -g pedig az erősítást állítja.
+Az \texttt{nc} (netcat) egy TCP kapcsolatot hoz létre a megadott szerverrel a megadott porton, és az onnan jövő adatot a standard outra írja.
+A megadott gépen és porton egy \texttt{rtl\_mus} nevő program fut, ami a szerverbe dugott RTL-SDRből jövő mintákat fogja továbbítani.
+
+A \texttt{tcc} lefordítja a C kódunkat, és egyből futtatja is az elkészült programot.
+A \texttt{sox} az újramintavételezést végzi el, hogy a 240 kHz-s jelből 48 kHz-eset csináljon.
+Az \texttt{aplay} pedig kijátsza a kapott mintákat a hangkártyán.
+
 
 \subsection{Deriválás}
 
