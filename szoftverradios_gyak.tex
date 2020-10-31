@@ -65,7 +65,7 @@ pinstyle/.style = {pin edge={to-,thin,black}
 \includegraphics[width=300pt,keepaspectratio]{figures/ha5kfu.eps}
 \\[0.5cm]
 Rádióamatőr tanfolyamot segítő jegyzet, egyelőre kidolgozás alatt \\
-Szabó Áron HA1FLX, HA5KFU... % Feel free to add yourself
+Szabó Áron HA1FLX, Mérő László HA1CNT, HA5KFU... % Feel free to add yourself
 \\
 Retzler András HA7ILM szoftverrádiós vevője alapján
 \\[1cm]
@@ -247,36 +247,6 @@ A \texttt{sox} az újramintavételezést végzi el, hogy a 240 kHz-s jelből 48 
 Az \texttt{aplay} pedig kijátsza a kapott mintákat a hangkártyán.
 
 
-\subsection{Deriválás}
-
-$\arctan$ deriválási szabálya:
-\begin{equation}
-\left( \arctan \left( x \right) \right)' = \frac{1}{1 + x^2}
-\end{equation}
-$\frac{f}{g}$ deriválási szabálya:
-\begin{equation}
-\left( \frac{f}{g} \right)' = \frac{ f' \cdot g - f  \cdot  g'}{g^2}
-\end{equation}
-$f(g(x))$ deriválási szabálya:
-\begin{equation}
-\left( f(g(x)) \right)' = f'(g(x)) \cdot g'(x)
-\end{equation}
-\vspace{20pt}
-
-$\arctan \left( \frac{q}{i} \right)$ deriválása:
-\begin{equation}
-\frac{\partial}{\partial t}\left( \arctan \left( \frac{q}{i} \right) \right) = 
-\end{equation}
-\begin{equation}
-\frac{1}{1 + \left( \frac{q}{i} \right)^2} \cdot \frac{\frac{\partial q}{\partial t} \cdot i - q  \cdot \frac{\partial i}{\partial t}}{i^2} =
-\end{equation}
-\begin{equation}
-\frac{\frac{\partial q}{\partial t} \cdot i - q  \cdot \frac{\partial i}{\partial t}}{\left( 1 + \frac{q^2}{i^2} \right) \cdot i^2 } 
-=
-\end{equation}
-\begin{equation}
-\frac{i \cdot \frac{\partial q}{\partial t} - q \cdot \frac{\partial i}{\partial t}}{i^2 + q^2}
-\end{equation}
 
 \end{document}
 
