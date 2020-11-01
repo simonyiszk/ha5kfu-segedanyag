@@ -65,7 +65,7 @@ pinstyle/.style = {pin edge={to-,thin,black}
 \includegraphics[width=300pt,keepaspectratio]{figures/ha5kfu.eps}
 \\[0.5cm]
 Rádióamatőr tanfolyamot segítő jegyzet, egyelőre kidolgozás alatt \\
-Szabó Áron HA1FLX, Mérő László HA1CNT, HA5KFU... % Feel free to add yourself
+Szabó Áron HA1FLX, Mérő László HA1CNT, Bazsó Márton HA7BM % Feel free to add yourself
 \\
 Retzler András HA7ILM szoftverrádiós vevője alapján
 \\[1cm]
@@ -173,18 +173,18 @@ az óramutató járásával ellentétesen forog.
 Ha a vizsgált komponens frekvenciája kisebb volt, mint a helyi oszcillátoré, $f$ negatív lesz, tehát az IQ vektor
 az óramutató járásával megegyezően forog.
 
-Ha az LO és a vett komponens frekvenciája megegyezik $f$ 0 lesz, így a demodulált IQ vektor konstans.
+Ha az LO és a vett komponens frekvenciája megegyezik, $f = 0$ lesz, így a demodulált IQ vektor konstans.
 Ilyenkor $\phi$ az LO és a vett jel közötti fáziseltérés.
 (Általánosságban a $\phi + 2\pi ft$ kifejezés értelmezhető a két jel fáziseltéréseként, azonban ez időben változó, ha azok nem azonos frekvenciájúak.)
 
 
 \subsection{Frekvencia moduláció}
 
-Frekvencia modulációnál egy vivő jel frekvenciájába kódoljuk az $x_m(t)$ moduláló jel által hordozott információt. Az $y(t)$ sugárzott jelünket a következő képpen számolhatjuk ki:
+Frekvencia modulációnál egy vivő jel frekvenciájába kódoljuk az $x_m(t)$ moduláló jel által hordozott információt. Az $y(t)$ modulált jelünket a következő képpen számolhatjuk ki:
 \[
   y(t) = A \cos(2 \pi t ( f_c + f_{\Delta} x(t) ) )
 \]
-Itt $A$ az amplitudónk, $f_c$ a közép frekvenciánk, ez a "vivő eredeti frekvenciája", illetve az állomás névleges frekvenciája (pl. 97.1 MHz). 
+Itt $A$ az amplitúdónk, $f_c$ a középfrekvenciánk, ez a "vivő eredeti frekvenciája", illetve az állomás névleges frekvenciája (pl. 97.1 MHz). 
 $f_{\Delta}$ a frekvencialöket, $\pm 1$ közé normált moduláló jelnél az kimeneti jel energiájának nagy része $f_c \pm f_{\Delta}$ közé esik.
 
 \clearpage
@@ -194,10 +194,10 @@ $f_{\Delta}$ a frekvencialöket, $\pm 1$ közé normált moduláló jelnél az k
 
 A feladathoz egy RTL-SDR hardvert fogunk felhasználni.
 Az USB stick a digitalizált IQ jelet egy bytestreamként küldi: egy 1 byte-os I majd egy 1 byte-os Q mintát küld felváltva.
-A 8 bites minták offszettel ábrázolják a negatív értékeket.
+A 8 bites minták offszettel ábrázolják a negatív értékeket (így például a jel $0$ értékét valójában a $127$-es bináris érték jelenti).
 A bytestreamet a demoduláló programunk a standard inputon fogja megkapni, majd a standard outra kell, hogy kiadja az abból kiszámolt hangmintát.
 
-Segítségképpen a minta beolvasást, illetve kiírás már szerepel a kiinduló kódban.
+Segítségképpen a minta beolvasás, illetve kiírás már szerepel a kiinduló kódban.
 A fogadott IQ jel magasabb mintavételi rátával fog jönni, mint amit a hangkártya kezelni tud, azonban ezt egy külső programmal a demoduláció után fogjuk csökkenteni.
 Ezért minden fogadott IQ mintára pontosan egy hangmintát kell a programnak kiadni.
 
@@ -225,12 +225,13 @@ int main()
 }
 \end{lstlisting}
 
-A programot a saját hardverrel következő parancssorral lehet futtatni:
+\clearpage
+A programot saját hardverrel a következő parancssorral lehet futtatni:
 \begin{lstlisting}[frame=single,language=bash]
  rtl_sdr -s 240000 -f 89500000 -g 20 - | tcc -lm -run minidemod-wfm.c | sox -t raw -r 240000 -e unsigned -b 8 -c 1 - -t raw - rate 48000 | aplay -f U8 -c1 -r 48000 --buffer-size=200000
 \end{lstlisting}
 
-Ha nincs saját hardvered használhatod a Kafu \texttt{rtl\_mus} szerverét ezzel a paranccsal:
+Ha nincs saját hardvered, használhatod a Kafu \texttt{rtl\_mus} szerverét ezzel a paranccsal:
 \begin{lstlisting}[frame=single,language=bash]
 nc teto.sch.bme.hu 7373 | tcc -lm -run minidemod-wfm.c | sox -t raw -r 240000 -e unsigned -b 8 -c 1 - -t raw - rate 48000 | aplay -f U8 -c1 -r 48000 --buffer-size=200000
 \end{lstlisting}
@@ -238,12 +239,12 @@ nc teto.sch.bme.hu 7373 | tcc -lm -run minidemod-wfm.c | sox -t raw -r 240000 -e
 Mindkét parancssorban az egyes programokat a \texttt{|} (pipe) karakter választja el, ami azt jelzi a shellnek,
 hogy a balra lévő program standard outját adja át a jobbra lévő program standard injére.
 
-Az \texttt{rtl\_sdr} program az USB stickről olvas mintákat, amiket a standard outra ír. A -s kapcsoló a mintavételi rátát, a -f a helyi oszcillátor frekvenciáját, a -g pedig az erősítást állítja.
+Az \texttt{rtl\_sdr} program az USB stickről olvas mintákat, amiket a standard outra ír. A -s kapcsoló a mintavételi rátát, a -f a helyi oszcillátor frekvenciáját, a -g pedig az erősítést állítja.
 Az \texttt{nc} (netcat) egy TCP kapcsolatot hoz létre a megadott szerverrel a megadott porton, és az onnan jövő adatot a standard outra írja.
-A megadott gépen és porton egy \texttt{rtl\_mus} nevő program fut, ami a szerverbe dugott RTL-SDRből jövő mintákat fogja továbbítani.
+A megadott gépen és porton egy \texttt{rtl\_mus} nevű program fut, ami a szerverbe dugott RTL-SDRből jövő mintákat fogja továbbítani.
 
 A \texttt{tcc} lefordítja a C kódunkat, és egyből futtatja is az elkészült programot.
-A \texttt{sox} az újramintavételezést végzi el, hogy a 240 kHz-s jelből 48 kHz-eset csináljon.
+A \texttt{sox} az újramintavételezést végzi el, a 240 kHz-s jelből 48 kHz-eset csinál.
 Az \texttt{aplay} pedig kijátsza a kapott mintákat a hangkártyán.
 
 
