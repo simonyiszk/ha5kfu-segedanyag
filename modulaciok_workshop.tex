@@ -1,5 +1,7 @@
 \documentclass[12pt,a4paper]{article}
 \usepackage[utf8]{inputenc}
+\usepackage{indentfirst}
+     \setlength{\parindent}{1em}
 \usepackage{graphicx}
 \usepackage{color}
 \usepackage[magyar]{babel}
@@ -21,7 +23,7 @@ pinstyle/.style = {pin edge={to-,thin,black}
 }
 }
 \usepackage[siunitx]{circuitikz} 
-\renewcommand{\lstlistingname}{Lista}
+\renewcommand{\lstlistingname}{Kód}
 \usepackage{hyperref}
 \hypersetup{
 	pdftitle={HA5KFU tanfolyam - Modulációs gyakorlat},
@@ -62,10 +64,11 @@ pinstyle/.style = {pin edge={to-,thin,black}
 \includegraphics[width=300pt,keepaspectratio]{figures/ha5kfu.eps}
 \\[0.5cm]
 Rádióamatőr tanfolyamot segítő jegyzet, egyelőre kidolgozás alatt \\
-Szabó Áron HA1FLX, Kiss Ádám HA8KDA, Bazsó Márton HA7BM % Feel free to add yourself
+2021 tavasz \\[0.5cm]
+Szabó Áron HA1FLX, Kiss Ádám HA8KDA, \\ Bazsó Márton HA7BM, Keresztes Botond% Feel free to add yourself
 \\[1cm]
 
-{\huge \bfseries Modulációs gyakorlat \\[2cm]}
+{\huge \bfseries Modulációs gyakorlat \\[0.5cm]}
 
 
 
@@ -77,17 +80,25 @@ Szabó Áron HA1FLX, Kiss Ádám HA8KDA, Bazsó Márton HA7BM % Feel free to add
 \newpage
 
 \section{Bevezető}
-A gyakorlat célja bemutatni a különböző modulációs eljárások idő- és frekvenciatartománybeli viselkedését, illetve matematikai leírásukat. 
+A gyakorlat célja bemutatni a különböző modulációs eljárások idő- és frekvenciatartománybeli viselkedését, illetve matematikai leírásukat. Ezzel megalapozzuk a szoftverrádiózáshoz szükséges tudást.
 
 \section{Előkészületek}
 A gyakorlat Octave-ban és Matlab-ban is elvégezhető, a használt parancsok mindkettőben működőképesek.
 
 \paragraph{Octave telepítés:} 
 \begin{itemize}
-	\item \textbf{GNU Octave telepítése:} \\\url{https://wiki.octave.org/Category:Installation}
-	\item \textbf{Signal package telepítése:} Octave-on belül: 	\\
+	\item \textbf{GNU Octave telepítése} \\\url{https://wiki.octave.org/Category:Installation}
+	\item \textbf{Signal package telepítése} \\
+	A jelfeldolgozó könyvtárak a Matlab-ban a telepítéssel érkeznek, Octave esetén csomagként érhetők el, és használat előtt be kell tölteni őket. A \texttt{signal} könyvtár a \texttt{control}-ra is támaszkodik, így a megfelelő sorrendben telepítsük őket.\\
+	Írjuk be az Octave parancssorába: 	\\
+	\texttt{pkg install -forge control}\\
 	\texttt{pkg install -forge signal}\\
-	Ha ez valamiért nem működne, akkor Ubuntun command line-ból is telepítheted: \texttt{sudo apt-get install octave-signal}
+	Az Octave indulásakor ez nem töltődik be automatikusan, mielőtt jelfeldolgozási függvényeket használnánk, töltsük be a \texttt{signal} comagot: \\
+	\texttt{pkg load signal}\\
+	A könyvtárat csomagkezelőből is telepítheted: \\
+	\lstinline[language=bash,basicstyle=\normalsize\ttfamily]{sudo apt-get install octave-signal #  Ubuntu} \\
+	\lstinline[language=bash,basicstyle=\normalsize\ttfamily]{sudo pacman -S octave-signal #  Arch vagy Manjaro} \\
+	\lstinline[language=bash,basicstyle=\normalsize\ttfamily]{sudo zypper install octave-forge-signal #  RPM (OpenSUSE)}
 \end{itemize}
 
 
@@ -95,11 +106,68 @@ A gyakorlat Octave-ban és Matlab-ban is elvégezhető, a használt parancsok mi
 \subsection{Keverés szükségessége}
 Tegyük fel, hogy van egy modulált jelünk valahol a rádiós spektrumban. (Pl. 540 kHz-en a Kossuth rádió vagy a 12 GHz-en egy prémium műhold csatorna kedvenc szolgáltatónknál) Ezt szeretnénk venni. A vett jel szempontjából zavaró információ az összes többi adás, illetve az egyéb frekvenciákon mérhető zaj, ezeket szükséges kiszűrni a tökéletes vételhez. A probléma, hogy gyakorlatilag kivitelezhetetlen nagyon keskeny szűrő magas frekvenciákon. Például egy 1 MHz sávszélességű jelet kiszűrni GHz-es tartományban már lehetetlen. Az úgynevezett relatív sávszélesség (sávszélesség osztva sávközéppel) egy ezred. Sok gyakorlattal és minőségi alkatrészekből építkezve körülbelül egy tizedes relatív sávszélességig tudunk megvalósítani áramkört.\par
 A problémát egy csellel oldjuk meg. Nagyjából kiszűrjük a jelet a saját sávjában, esetleg még erősítjük is (itt a sorrend lehet fordított!). Majd egy keverőt helyezünk el. A keverő frekvenciában eltolja a bemeneti jelet az ő oszcillátor bemenetének frekvenciájával mindkét irányba. A nem használt keverési terméket kiszűrjük. (Kellően nagy keverési frekvencia esetén ez messze fog kerülni a használttól, így könnyű hozzá szűrőt tervezni). Így a jelünk alacsonyabb frekvenciára került, ahol már ugyan akkora ügyességgel és anyagminőséggel keskenyebb sávú szűrőt tudunk építeni. Ezzel a módszerrel ki tudjuk szűrni a számunkra fontos jel körül a többi zavaró jelet.
+
+
+\begin{figure}[H]
+\label{fig:keverok}
+\centering
+\begin{tikzpicture}
+
+	\draw
+	
+	(1.2,1.7) node[label={[font=\footnotesize]above:Antenna}] {}
+	(1,-0.5) node[label={[font=\footnotesize]below:9 GHz - 14GHz}] {}
+	
+	(5,-0.5) node[label={[font=\footnotesize]below:800 MHz - 1000 MHz}] {}
+	
+	(9,-0.5) node[label={[font=\footnotesize]below:450 MHz - 550 MHz}] {}
+	
+	
+	(3,-2.5) node[label={[font=\footnotesize]below:10 GHz}] {}
+	(7,-2.5) node[label={[font=\footnotesize]below:500 MHz}] {}
+	
+	
+	(3,0.5) node[label={[font=\footnotesize]above:Keverő}] {}
+	(7,0.5) node[label={[font=\footnotesize]above:Keverő}] {}
+	
+	(0,0)[antenna]node(ant){}
+	(3,0)[mixer] node(mix){}	
+	
+	(7,0)[mixer] node(mix2){}	
+	(3.5,-2)[oscillator] node(osc){}	
+	(7.5,-2)[oscillator] node(osc){}	
+	(ant) to [bandpass] ++(2,0) to [short] ++(0.5,0)
+	(3,-1.5) to [short] (3,-0.5)
+	(3.5,0) to [bandpass] ++(2.5,0) to [short] ++(0.5,0)
+	(7,-1.5) to [short] (7,-0.5)
+	(7.5,0) to [bandpass] ++(2.5,0) to [short] ++(0.5,0)
+	;
+    \end{tikzpicture}
+\caption{
+Szuperheterodin struktúra} 
+\end{figure}
+
+\subsubsection{Tükörfrekvencia}
+\begin{equation}
+    \cos \left( \omega_{1} t \right) \cdot \cos \left( \omega_{2} t \right) = 
+    \frac{1}{2} \cos \left( \left( \omega_{1} + \omega_{2} \right) t \right) + \frac{1}{2} \cos \left( \left( \omega_{1} - \omega_{2} \right) t \right)
+    \label{eq:modulacios_tetel}
+\end{equation}
+
+Létezik úgynevezett tükörfrekvencia. Ez az a sáv, amit a keverő ugyanarra a frekvenciára kever, mint a hasznos jelet. Vegyünk például egy 100\,MHz-es adást, amit 10\,MHz-re szeretnénk lekeverni. A modulációs tétel (\ref{eq:modulacios_tetel}) értelmében ezt például úgy érhetjük el, hogy a 100\,MHz-es adást megszorozzuk egy 90\,MHz-es oszcillátorral (a másik lehetőség egy 110\,MHz-es helyi oszcillátor jel lenne), így az 10\,MHz-en megjelenik mint különbségi frekvencia. Viszont ekkor a 80\,MHz-en lévő spektrumrész is bekeverődik 10\,MHz-re, mint összegfrekvencia. Az így fellépő, de oda nem illő részt hívjuk tükör-átlapolódásnak.
+
+Ezt az eredeti, ide lapolódó spektrumrészt ki kell szűrni a keverés előtt, különben áthallás lesz két adó között. A keverő kimenetét középfrekvenciának szokták hívni, az ezt követő szűrőt KF szűrőnek. (Angolul intermediate freq, és IF filter).
+
 \subsubsection{Elgondolkodtató megjegyzések}
-Létezik úgynevezett tükörfrekvencia. Ez az a sáv, amit a keverő ugyan arra a frekvenciára kever, mint a hasznos jelet -- ezt ki kell szűrni a keverés előtt, különben áthallás lesz két adó között. A keverő kimenetét középfrekvenciának szokták hívni, az ezt követő szűrőt KF szűrőnek. (Angolul intermediate freq, és IF filter). Ha hangolható a keverőnk oszcillátora, akkor a lefedett sáv nem lehet nagyobb a KF szűrő sávközepének kétszeresénél. Ha vevőt építünk, akkor érdemes először felfele keverni, azaz a magasabb frekvenciájú keverési terméket használni, ott szűrni, majd onnan lekeverni, mert így lesz a legnagyobb az ún. tükörszelektivitásunk. Digitális jeleknél is fennáll a fenti gondolatmenet, létezik úgynevezett digitális KF is.
+\begin{itemize}
+    \item Ha hangolható a keverőnk oszcillátora, akkor a lefedett sáv nem lehet nagyobb a KF szűrő sávközepének kétszeresénél.
+    \item Ha vevőt építünk, akkor érdemes először felfele keverni, azaz a magasabb frekvenciájú keverési terméket használni, ott szűrni, majd onnan lekeverni, mert így lesz a legnagyobb az ún. tükörszelektivitásunk.
+    \item    Digitális jeleknél is fennáll a fenti gondolatmenet, létezik úgynevezett digitális KF is.
+
+\end{itemize}
 
 \subsection{Keverés matematikája}
-Vizsgáljuk csupán egy szinuszjelet, ennél összetettebb jel felfogható több szinusz összegeként, a lentiek igazak erre az esetre is, csak több példányban értelmezve
+Vizsgáljuk csupán egy szinuszjelet, ennél összetettebb jel felfogható több szinusz összegeként, a lentiek igazak erre az esetre is, csak több példányban értelmezve.
 \par
 Vegyünk egy vektort, ami forog körbe körbe. Vegyük ennek a vektor csücskének az egyik tengelyre vett árnyékát. A tengelyen a szinusz függvény szerint fog mozogni a pont. Ha ezt a tengelyen mozgó pontot egy ceruzára cseréljük, és a papírt elkezdjük a mozgására merőlegesen lehúzni egyenletes sebességgel, akkor egy ideális szinuszt fogunk kapni. Bizonyítást lásd Euler-tétel.
 \par
@@ -110,13 +178,31 @@ A koordináta-rendszert, amiben ábrázoljuk a lelassított szinusz, konstellác
 \subsection{Egyszerű modulációk konstellációs ábrája}
 \paragraph{AM}
 Amplitúdó modulált esetben a konstellációs pont szöge áll, azonban az amplitúdója változik. Amennyiben a szög folyamatosan nő enyhén, úgy frekvencia-hibánk van az adóhoz képest, az oszcillátorunk frekvenciája kicsit más.
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=6cm]{figures/modulaciok_workshop_konst_am_2.eps}
+\caption{AM konstellációs ábrája}
+\label{fig:konstam}
+\end{center}
+\end{figure}
 \paragraph{PM}
 Fázismodulációnál az adó néha fázist vált a jelében, ekkor nálunk a lekevert/visszalassított szinuszban is lesz egy fázisugrás. Amennyiben az elvárt szimbólumok helyei itt is egy kör mentén vándorolnak, úgy frekvenciahibánk van.
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=6cm]{figures/modulaciok_workshop_konst_pm_2.eps}
+\caption{PM konstellációs ábrája}
+\label{fig:konstpm}
+\end{center}
+\end{figure}
 \paragraph{FM}
 Frekvenciamodulációnál nem szoktuk lekövetni pontosan a frekvenciaváltozását a jelnek. Azt nézzük, hogy épp milyen ütemben gyorsul el tőlünk, vagy lassul vissza hozzánk. Felírva szögfüggvényekkel, hogy épp mekkora szögsebessége van az FM jelnek (ehhez kell az előző vektor értéke is) számolható egy érték, amit megfelelő konstanssal (hangerő) megszorozva már demoduláltuk is a jelet. A frekvenciahiba itt egy konstans eltolást jelent majd a demodulált jelben. Hang esetén ezt nem halljuk ki.
-
-\subsection{IQ demodulátorok}
-Az IQ demodulátornál egy szinusz és egy koszinusz jellel is megszorozzuk a bejövő jelünket. A szinusznak és a koszinusznak a frekvenciája megegyezik. Feltételezve, hogy a felső keverési termékeket külön-külön kiszűrjük, megkapjuk a visszalassítós keverést. Az I és Q jelet lehet külön-külön digitalizálni, ezen a ponton már nem is szükséges nagyon gyors analógból digitális átalakítás, hiszen lassú jelekkel dolgozunk. Az I és Q jelek mint koordináták fogják megmutatni, hogy épp merre mutat a vett jel vektora, plusz a való életben valamekkora zaj is fog megjelenni ezen túl. Az IQ jelek digitálisan feldolgozhatóak, elvégezhető a demoduláció. Ezen az elven alapszik a gyakran használt RTL-SDR működése is, amivel például a SMOG jeleit is lehet fogni.
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=6cm]{figures/modulaciok_workshop_konst_fm_2.eps}
+\caption{FM konstellációs ábrája}
+\label{fig:konstfm}
+\end{center}
+\end{figure}
 
 \clearpage
 \section{Feladatok}
@@ -126,7 +212,7 @@ Első feladatunk egy szinusz jel generálása lesz, melyet a \textit{sin()} füg
 
 Létre kell hoznunk tehát egy időtengelyt, aminek pontjaiban kiszámoljuk a függvény értékét. Ebből a szempontból fontos meghatározni a mintavételi frekvenciát ($F_s$), hiszen ebből az értékből számolható, hogy két minta közt mennyi idő fog eltelni. Válasszuk a mintavételi frekvenciát \textit{44 100 Hz}-re, ami a digitális audió jelfeldolgozásban használatos frekvencia, és a számítógép hangkártyáján könnyen lejátszható.
 
-Ha a minta hosszát ($l$) másodpercben szeretnénk megadni, a minták számának ($N$) meghatározásához egyszerűen szorozzuk meg a másodperc értéket a mintavételi frekvenciával. A másodperc időtengelyt ($t$) úgy kaphatjuk meg, ha az \texttt{1:N} sorozatot elemenként elosztjuk a mintavételi frekvenciával (a transzponálásra azért van szükség, hogy oszlopvektort kapjunk). Ez után a szinusz jel egyszerűen kiszámolható: mivel a szinusz egy periódusa $2\pi$, a szinuszjel pillanatnyi értékét $t \cdot f \cdot 2\pi$-re kell választani, ahol $f$ a szinusz frekvenciája.
+Ha a minta hosszát ($l$) másodpercben szeretnénk megadni, a minták számának ($N$) meghatározásához egyszerűen szorozzuk meg a másodperc értéket a mintavételi frekvenciával. A másodperc időtengelyt ($t$) úgy kaphatjuk meg, ha az \texttt{1:N} sorozatot elemenként elosztjuk a mintavételi frekvenciával (a transzponálásra azért van szükség, hogy oszlopvektort kapjunk). Ez után a szinusz jel egyszerűen kiszámolható: mivel a szinusz egy periódusa $2\pi$, a szinuszjel pillanatnyi értékét $2\pi \cdot f \cdot t$-re kell választani, ahol $f$ a szinusz frekvenciája.
 
 \begin{lstlisting}[frame=single,language=matlab,caption=Mintavételi frekvencia beállítása és szinuszjel előállítása]
 Fs = 44100; % mintaveteli freki
@@ -134,8 +220,9 @@ l = 1.5; % minta hossza masodpercben
 N = l * Fs, % mintak szama
 f = 440; % 20 Hz-es lesz a jel
 t = ( 1:N )' ./ Fs; % Ido oszlopvektora
-y = sin( t * f * 2 * pi );
+y = sin( 2 * pi * f * t );
 plot( t, y );
+xlim([t(1), t(end)]) %grafikon x-tengely hatarainak beallitasa
 \end{lstlisting}
 
 \clearpage
@@ -151,12 +238,15 @@ plot( t, y );
 
 A 20 Hz-es jelet könnyen ábrázoltuk, de a hallható tartomány magasabb frekvencián van. Változtassuk a jel frekvenciáját 440 Hz-re (zenei A hang), és játsszuk ki a számítógép hangkártyáján a jelet:
 
+
 \lstinline{soundsc(y, Fs); % Hang lejatszasa Fs mintaveteli frekvenciaval } 
 
 
 Itt már több információt kapnánk a jelről, ha frekvenciatartományban, vízesés diagramon ábrázolnánk a jelet. A HA5KFU Octave gyakorlathoz csomagolt \textit{wf(y, Fs)} függvénnyel ezt a rádiózásban megszokott formában rajzolhatjuk ki. 
 
+
 \lstinline{wf(y, Fs); % Vizeses diagram kirajzolasa }  
+
 
 \begin{figure}[H]
 \begin{center}
@@ -167,11 +257,11 @@ Itt már több információt kapnánk a jelről, ha frekvenciatartományban, ví
 \end{figure}
 
 A vízesés diagram 0-tól a mintavételi frekvencia feléig ábrázolja a frekvenciakomponenseket, az ábrán láthatjuk a konstans szinusz jel képét 440 Hz-nél. Próbálkozzunk meg a jel manipulálásával, hallgassuk meg, ábrázoljuk frekvenciatartományban!\\
-\lstinline{y = ( 1 - ( 1 / l ) * t ) .* sin( t * f * 2 * pi ); % Fokozatosan halkulo jel } \\
+\lstinline{y = ( 1 - ( 1 / l ) * t ) .* sin( 2 * pi * f * t ); % Fokozatosan halkulo jel } \\
 \lstinline{y = sin( t .* ( f * t ) * 2 * pi ); % Valtozo frekvenciaju szinusz } \\
-\lstinline{y = sin( t * f * 2 * pi ) + sin( t * 1.5*f * 2 * pi ) ; % Tobb szinusz osszege }
+\lstinline{y = sin( 2 * pi * f * t ) + sin( 2 * pi * (1.5 * f) * t ) ; % Tobb szinusz osszege }
 \\
-Megpróbálhatunk fehér zajt generálni, vagy hangfilet betölteni is. \\
+Megpróbálhatunk akár fehér zajt generálni, vagy hangfájlt betölteni. \\
 \lstinline{y = rand( N, 1 ) ; % N elemu zaj}  \\
 \lstinline{[y,Fs] = audioread( 'akkord.wav' ); N = length( y ); l=N/Fs; % WAV file beolvasasa}
 
@@ -231,7 +321,7 @@ Nézzük meg a gyakorlatban, próbáljuk meg az \textit{akkord.wav} hangfilet ke
 [a,Fs] = audioread('akkord.wav'); N=length(a);
 f = 10000; % 10 kHz-es lesz a vivo jel
 t = ( 1:N )' ./ Fs;
-b = sin( t * f * 2 * pi );
+b = sin( 2 * pi * f * t );
 
 m = 0.75; % modulacios index
 dc_offset = (1 + 1-m) * max(a);
@@ -295,13 +385,13 @@ Vajon hogyan kapjuk vissza a kevert jelből az eredeti információt?
 Az IQ modulátor blokkvázlata} 
 \end{figure}
 
-Az IQ modulátornál egy komplex jellel moduláljuk a vivő frekvenciát. Ezzel a módszerrel az alapsávi jelet egy komplex fazorként ábrázolhatjuk, és ez nagyban megkönnyíti a modulációs műveletek elvégzését.
+Az IQ modulátornál egy komplex jellel moduláljuk a vivő frekvenciát. Ezzel a módszerrel az alapsávi jelet egy komplex fazorként ábrázolhatjuk, így -- kellő ügyességgel -- tetszőleges moduláció létrehozható.
 
 \subsubsection{Fázismoduláció}
 
 Vegyük át újra hogy is néz ki egy szinusz.
 \begin{equation}
-y(t) = A \cdot \sin{ ( f\cdot t +  \phi   ) }
+y(t) = A \cdot \sin{ ( 2\pi \cdot f \cdot t + \phi ) }
 \end{equation}
 A képletben lévő amplitúdót amplitúdómodulációban, a frekvenciát frekvenciamodulációban használjuk, a fázist pedig fázismodulációban. Talán a fázismodulációt a legnehezebb megfogni élettapasztalatból, mivel a fülünkkel nem halljuk ki a jelek fázisát -- furcsa is lenne ha egy méterrel távolabbról másnak hallanánk mások hangját. A fázis jelen esetben is nehezen értelmezhető, mivel a kiadott jel úgymond elveszik, nincs mihez hasonlítani első közelítésben majd vevő oldalon a fázist. A probléma feloldása az, hogy egyrészt eltárolhatjuk a jel mintáit majd vevőoldalon, illetve a fázist tudja majd a vevő a saját, azonos frekvencián futó oszcillátorához képest mérni. Különböző frekvenciákhoz nincs értelme fázist mérni általában, mert a különböző frekvencia miatt fázisban úgyis elmásznak egymástól.
 \clearpage
@@ -332,7 +422,7 @@ N = l * Fs; % mintak szama
 t = ( 1:N )' ./ Fs; % Ido oszlopvektora
 
 f = 5; % eredeti jel frek
-x =  sin( t * f * 2 * pi ) .* 0.5; % ez lesz az atvinni kivant jel (1/2 amplitudo)
+x =  sin( 2 * pi * f * t ) .* 0.5; % ez lesz az atvinni kivant jel (1/2 amplitudo)
 
 c = ones(N,1); % N meretu vektor letrehozasa es feltoltese 1-essel
 for i=1:N
@@ -341,8 +431,8 @@ for i=1:N
 end
 
 fo = 3000; % oszcillator frek
-oi =  cos( t * fo * 2 * pi ); % in-phase oszcillator
-oq = -sin( t * fo * 2 * pi ); % quadrature oszcillator
+oi =  cos( 2 * pi * fo * t ); % in-phase oszcillator
+oq = -sin( 2 * pi * fo * t ); % quadrature oszcillator
 
 y = oq .* imag(c) + oi .* real(c); % IQ keveres
 
@@ -352,7 +442,7 @@ figure(2);
 wf(y, Fs);
 \end{lstlisting}
 
-Ez alapján készítsünk el egy FM modulátort! Nagyon hasonlít az előzőhöz, csak itt a komplex vektor forgásának frekvenciája változik.
+\paragraph{Feladat:} Ez alapján készítsünk el egy FM modulátort! Nagyon hasonlít az előzőhöz, csak itt a komplex vektor forgásának frekvenciája változik.
 
 \subsection{Újramintavételezés}
 
