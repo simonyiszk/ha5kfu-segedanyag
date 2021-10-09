@@ -64,7 +64,7 @@ pinstyle/.style = {pin edge={to-,thin,black}
 \includegraphics[width=300pt,keepaspectratio]{figures/ha5kfu.eps}
 \\[0.5cm]
 Rádióamatőr tanfolyamot segítő jegyzet, egyelőre kidolgozás alatt \\
-2021 tavasz \\[0.5cm]
+2021 ősz \\[0.5cm]
 Szabó Áron HA1FLX, Kiss Ádám HA8KDA, \\ Bazsó Márton HA7BM, Keresztes Botond% Feel free to add yourself
 \\[1cm]
 
@@ -101,70 +101,35 @@ A gyakorlat Octave-ban és Matlab-ban is elvégezhető, a használt parancsok mi
 	\lstinline[language=bash,basicstyle=\normalsize\ttfamily]{sudo zypper install octave-forge-signal #  RPM (OpenSUSE)}
 \end{itemize}
 
-
+\clearpage
 \section{Elméleti összefoglaló}
-\subsection{Keverés szükségessége}
-Tegyük fel, hogy van egy modulált jelünk valahol a rádiós spektrumban. (Pl. 540 kHz-en a Kossuth rádió vagy a 12 GHz-en egy prémium műhold csatorna kedvenc szolgáltatónknál) Ezt szeretnénk venni. A vett jel szempontjából zavaró információ az összes többi adás, illetve az egyéb frekvenciákon mérhető zaj, ezeket szükséges kiszűrni a tökéletes vételhez. A probléma, hogy gyakorlatilag kivitelezhetetlen nagyon keskeny szűrő magas frekvenciákon. Például egy 1 MHz sávszélességű jelet kiszűrni GHz-es tartományban már lehetetlen. Az úgynevezett relatív sávszélesség (sávszélesség osztva sávközéppel) egy ezred. Sok gyakorlattal és minőségi alkatrészekből építkezve körülbelül egy tizedes relatív sávszélességig tudunk megvalósítani áramkört.\par
-A problémát egy csellel oldjuk meg. Nagyjából kiszűrjük a jelet a saját sávjában, esetleg még erősítjük is (itt a sorrend lehet fordított!). Majd egy keverőt helyezünk el. A keverő frekvenciában eltolja a bemeneti jelet az ő oszcillátor bemenetének frekvenciájával mindkét irányba. A nem használt keverési terméket kiszűrjük. (Kellően nagy keverési frekvencia esetén ez messze fog kerülni a használttól, így könnyű hozzá szűrőt tervezni). Így a jelünk alacsonyabb frekvenciára került, ahol már ugyan akkora ügyességgel és anyagminőséggel keskenyebb sávú szűrőt tudunk építeni. Ezzel a módszerrel ki tudjuk szűrni a számunkra fontos jel körül a többi zavaró jelet.
+%\subsection{Keverés szükségessége}
+%Tegyük fel, hogy van egy modulált jelünk valahol a rádiós spektrumban. (Pl. 540 kHz-en a Kossuth rádió vagy a 12 GHz-en egy prémium műhold csatorna kedvenc szolgáltatónknál) Ezt szeretnénk venni. A vett jel szempontjából zavaró információ az összes többi adás, illetve az egyéb frekvenciákon mérhető zaj, ezeket szükséges kiszűrni a tökéletes vételhez. A probléma, hogy gyakorlatilag kivitelezhetetlen nagyon keskeny szűrő magas frekvenciákon. Például egy 1 MHz sávszélességű jelet kiszűrni GHz-es tartományban már lehetetlen. Az úgynevezett relatív sávszélesség (sávszélesség osztva sávközéppel) egy ezred. Sok gyakorlattal és minőségi alkatrészekből építkezve körülbelül egy tizedes relatív sávszélességig tudunk megvalósítani áramkört.\par
+%A problémát egy csellel oldjuk meg. Nagyjából kiszűrjük a jelet a saját sávjában, esetleg még erősítjük is (itt a sorrend lehet fordított!). Majd egy keverőt helyezünk el. A keverő frekvenciában eltolja a bemeneti jelet az ő oszcillátor bemenetének frekvenciájával mindkét irányba. A nem használt keverési terméket kiszűrjük. (Kellően nagy keverési frekvencia esetén ez messze fog kerülni a használttól, így könnyű hozzá szűrőt tervezni). Így a jelünk alacsonyabb frekvenciára került, ahol már ugyan akkora ügyességgel és anyagminőséggel keskenyebb sávú szűrőt tudunk építeni. Ezzel a módszerrel ki tudjuk szűrni a számunkra fontos jel körül a többi zavaró jelet.
+\subsection{Keverés}
+Az elektromágneses spektrum egy véges erőforrás, így szeretnénk hatékonyan kihasználni.
+``Emberi fogyasztásra alkalmas'' jeleinket az alapsávban (hangátvitel esetén kb. 20 Hz - 20 kHz között) állítjuk elő, de értelemszerűen ha mindannyian ebben a tartományban forgalmaznánk, akkor nagyon kevés adást tudnánk sugározni, mert mindig csak egymást zavarnánk. Gondoljunk csak arra, amikor mindenki egyszerre beszél az étkezőasztalnál, nagy hangzavar keletkezik, és semmit sem érteni. Épp ezért, az adásainkat szeretnénk az elektromágneses (EM) spekturm különböző sávjaiban elhelyzeni, így jobban kihasználva azt.
 
+Erre eszközünk a keverés, mellyel jeleinket el tudjuk tolni frekvenciatartományban, vagyis az EM spektrumban. Ez matematikailag két jel összeszorzását jelenti.
+A pontos összefüggést a modulációs tétel írja le:
 
-\begin{figure}[H]
-\label{fig:keverok}
-\centering
-\begin{tikzpicture}
-
-	\draw
-	
-	(1.2,1.7) node[label={[font=\footnotesize]above:Antenna}] {}
-	(1,-0.5) node[label={[font=\footnotesize]below:9 GHz - 14GHz}] {}
-	
-	(5,-0.5) node[label={[font=\footnotesize]below:800 MHz - 1000 MHz}] {}
-	
-	(9,-0.5) node[label={[font=\footnotesize]below:450 MHz - 550 MHz}] {}
-	
-	
-	(3,-2.5) node[label={[font=\footnotesize]below:10 GHz}] {}
-	(7,-2.5) node[label={[font=\footnotesize]below:500 MHz}] {}
-	
-	
-	(3,0.5) node[label={[font=\footnotesize]above:Keverő}] {}
-	(7,0.5) node[label={[font=\footnotesize]above:Keverő}] {}
-	
-	(0,0)[antenna]node(ant){}
-	(3,0)[mixer] node(mix){}	
-	
-	(7,0)[mixer] node(mix2){}	
-	(3.5,-2)[oscillator] node(osc){}	
-	(7.5,-2)[oscillator] node(osc){}	
-	(ant) to [bandpass] ++(2,0) to [short] ++(0.5,0)
-	(3,-1.5) to [short] (3,-0.5)
-	(3.5,0) to [bandpass] ++(2.5,0) to [short] ++(0.5,0)
-	(7,-1.5) to [short] (7,-0.5)
-	(7.5,0) to [bandpass] ++(2.5,0) to [short] ++(0.5,0)
-	;
-    \end{tikzpicture}
-\caption{
-Szuperheterodin struktúra} 
-\end{figure}
-
-\subsubsection{Tükörfrekvencia}
 \begin{equation}
     \cos \left( \omega_{1} t \right) \cdot \cos \left( \omega_{2} t \right) = 
     \frac{1}{2} \cos \left( \left( \omega_{1} + \omega_{2} \right) t \right) + \frac{1}{2} \cos \left( \left( \omega_{1} - \omega_{2} \right) t \right)
     \label{eq:modulacios_tetel}
 \end{equation}
 
+Ezt a két jelet vivőnek és moduláló (alapsávi) jelnek szokás hívni. A tételben szereplő jelek szinuszosak, de a gyakorlatban a moduláló jelünk tetszőleges lehet. A tétel továbbra is alkalmazható lesz, ugyanis bármilyen jel felbontható szinuszos jelek összegére, és ezek mindegyikére egyenként alkalmazhatjuk a modulációs tételt. Ha ezt a módszert önmagában alkalmazzuk, azt amplitúdómodulációnak hívjuk (AM). A frekvencia- és fázismodulációkóról a tanfolyamon már volt szó, de lentebb átismételjük őket.
+
+
+\subsubsection{Tükörfrekvencia}
+
+
 Létezik úgynevezett tükörfrekvencia. Ez az a sáv, amit a keverő ugyanarra a frekvenciára kever, mint a hasznos jelet. Vegyünk például egy 100\,MHz-es adást, amit 10\,MHz-re szeretnénk lekeverni. A modulációs tétel (\ref{eq:modulacios_tetel}) értelmében ezt például úgy érhetjük el, hogy a 100\,MHz-es adást megszorozzuk egy 90\,MHz-es oszcillátorral (a másik lehetőség egy 110\,MHz-es helyi oszcillátor jel lenne), így az 10\,MHz-en megjelenik mint különbségi frekvencia. Viszont ekkor a 80\,MHz-en lévő spektrumrész is bekeverődik 10\,MHz-re, mint összegfrekvencia. Az így fellépő, de oda nem illő részt hívjuk tükör-átlapolódásnak.
 
 Ezt az eredeti, ide lapolódó spektrumrészt ki kell szűrni a keverés előtt, különben áthallás lesz két adó között. A keverő kimenetét középfrekvenciának szokták hívni, az ezt követő szűrőt KF szűrőnek. (Angolul intermediate freq, és IF filter).
 
-\subsubsection{Elgondolkodtató megjegyzések}
-\begin{itemize}
-    \item Ha hangolható a keverőnk oszcillátora, akkor a lefedett sáv nem lehet nagyobb a KF szűrő sávközepének kétszeresénél.
-    \item Ha vevőt építünk, akkor érdemes először felfele keverni, azaz a magasabb frekvenciájú keverési terméket használni, ott szűrni, majd onnan lekeverni, mert így lesz a legnagyobb az ún. tükörszelektivitásunk.
-    \item    Digitális jeleknél is fennáll a fenti gondolatmenet, létezik úgynevezett digitális KF is.
-
-\end{itemize}
+Az IQ moduláció segítségével a tükörfrekvenciából adódó problémák kivédhetők.
 
 \subsection{Keverés matematikája}
 Vizsgáljuk csupán egy szinuszjelet, ennél összetettebb jel felfogható több szinusz összegeként, a lentiek igazak erre az esetre is, csak több példányban értelmezve.
@@ -174,10 +139,10 @@ Vegyünk egy vektort, ami forog körbe körbe. Vegyük ennek a vektor csücskén
 A keverés során semmi mást nem teszünk, mint próbáljuk felvenni a sebességet a jellel. Azaz a vektor továbbra is forog úgy, ahogy forog, viszont a koordináta rendszert elkezdjük forgatni hozzá. Ha ugyan azon irányba, akkor különbségi keverést csinálunk, ha ellentétesbe, akkor összegzőt. (A valóságban persze a kettőt csak együtt tudjuk csinálni. Valós szinusszal keverünk, ami az Euler-tétel miatt két részre bontható, az egyik az egyik, a másik iránynak felel meg.) Ekkor elképzelhető, hogy a kapott szinuszunk lassul vagy gyorsul. Le tudjuk azonos sebesség esetén nullára is lassítani a látszólagos sebességét. Ekkor a szinusz és a koordináta-rendszerünk fázisától függően egy valamilyen álló fázisban látjuk a vektort.
 \par
 A koordináta-rendszert, amiben ábrázoljuk a lelassított szinusz, konstellációs diagramnak nevezzük. A vett jel (tfh. szinusz) vektorának a végpontját pedig konstellációs pontnak. Szokás a különböző konstellációs térnegyedekhez vagy ennél is finomabb felbontásokhoz digitális szimbólumokat is rendelni, amiket később (miután rászinkronizált a vevő az adó bitkibocsájtási ütemére) bitfolyamként tud értelmezni egy következő fokozat.
-
+\clearpage
 \subsection{Egyszerű modulációk konstellációs ábrája}
 \paragraph{AM}
-Amplitúdó modulált esetben a konstellációs pont szöge áll, azonban az amplitúdója változik. Amennyiben a szög folyamatosan nő enyhén, úgy frekvencia-hibánk van az adóhoz képest, az oszcillátorunk frekvenciája kicsit más.
+Amplitúdó modulált esetben a konstellációs pont szöge áll, azonban az amplitúdója változik.
 \begin{figure}[H]
 \begin{center}
 \includegraphics[width=6cm]{figures/modulaciok_workshop_konst_am_2.eps}
@@ -186,7 +151,7 @@ Amplitúdó modulált esetben a konstellációs pont szöge áll, azonban az amp
 \end{center}
 \end{figure}
 \paragraph{PM}
-Fázismodulációnál az adó néha fázist vált a jelében, ekkor nálunk a lekevert/visszalassított szinuszban is lesz egy fázisugrás. Amennyiben az elvárt szimbólumok helyei itt is egy kör mentén vándorolnak, úgy frekvenciahibánk van.
+Az alapsávi jel amplitúdóját a modulált jel fázisával reprezentáljuk. A jel 0 feletti értéke a nulla fokhoz képest pozitív, a 0 alatti értéke negatív szöget jelent. Az amplitúdó arányát a szöghöz képest fázislöketnek nevezzük. A fázislöket túl nagy értékénél körbeérhetünk a körön, túl kicsi értéknél viszont nehezen észlelhető a fázisváltozás.
 \begin{figure}[H]
 \begin{center}
 \includegraphics[width=6cm]{figures/modulaciok_workshop_konst_pm_2.eps}
@@ -195,7 +160,8 @@ Fázismodulációnál az adó néha fázist vált a jelében, ekkor nálunk a le
 \end{center}
 \end{figure}
 \paragraph{FM}
-Frekvenciamodulációnál nem szoktuk lekövetni pontosan a frekvenciaváltozását a jelnek. Azt nézzük, hogy épp milyen ütemben gyorsul el tőlünk, vagy lassul vissza hozzánk. Felírva szögfüggvényekkel, hogy épp mekkora szögsebessége van az FM jelnek (ehhez kell az előző vektor értéke is) számolható egy érték, amit megfelelő konstanssal (hangerő) megszorozva már demoduláltuk is a jelet. A frekvenciahiba itt egy konstans eltolást jelent majd a demodulált jelben. Hang esetén ezt nem halljuk ki.
+% Frekvenciamodulációnál nem szoktuk lekövetni pontosan a frekvenciaváltozását a jelnek. Azt nézzük, hogy épp milyen ütemben gyorsul el tőlünk, vagy lassul vissza hozzánk. Felírva szögfüggvényekkel, hogy épp mekkora szögsebessége van az FM jelnek (ehhez kell az előző vektor értéke is) számolható egy érték, amit megfelelő konstanssal (hangerő) megszorozva már demoduláltuk is a jelet. A frekvenciahiba itt egy konstans eltolást jelent majd a demodulált jelben. Hang esetén ezt nem halljuk ki.
+A frekvenciamoduláció nagyban hasonlít a fázismodulációra, azonban itt a fázis változásának mértéke hordozza az információt (tehát a szögsebessége, a fázis deriváltja). Minél nagyobb a fáziskülönbség két egymást követő pont között, annál nagyobb az alapsávi jel amplitúdója. A moduláló jel amplitúdója és a fázisváltozás közti szorzót itt is löketnek nevezzük.
 \begin{figure}[H]
 \begin{center}
 \includegraphics[width=6cm]{figures/modulaciok_workshop_konst_fm_2.eps}
@@ -305,7 +271,7 @@ Megpróbálhatunk akár fehér zajt generálni, vagy hangfájlt betölteni. \\
 	;
     \end{tikzpicture}
 \caption{
-A keverő blokkvázlata} 
+A keverő blokkvázlata (megjegyzés: a fenti elrendezés digitális jelfeldolgozásnál működhet, analóg keverő nem kaphat DC eltolást!)} 
 \end{figure}
 
 Amikor egy jelet egy szinusz oszcillátor jelével keverünk (szorzunk), a jel megjelenik a frekvenciatartományban a két frekvencia összegeként és különbségeként. Ha pl a két jel egy $\omega_1$ frekvenciájú koszinusz vivő, és egy $\omega_2$ frekvenciájú koszinusz moduláló jel, a modulációs tétel alapján:
