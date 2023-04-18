@@ -185,7 +185,7 @@ Ha a minta hosszát ($l$) másodpercben szeretnénk megadni, a minták számána
 Fs = 44100; % mintaveteli freki
 l = 1.5; % minta hossza masodpercben
 N = l * Fs, % mintak szama
-f = 440; % 20 Hz-es lesz a jel
+f = 440; % 440 Hz-es lesz a jel
 t = ( 1:N )' ./ Fs; % Ido oszlopvektora
 y = sin( 2 * pi * f * t );
 plot( t, y );
