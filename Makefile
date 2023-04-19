@@ -3,6 +3,7 @@ OBJS=$(SRCS:.tex=.pdf)
 
 %.pdf: %.tex
 	pdflatex -halt-on-error $<
+	pdflatex -halt-on-error $<
 
 all: $(OBJS)
 
