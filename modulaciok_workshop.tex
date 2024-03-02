@@ -56,6 +56,7 @@ pinstyle/.style = {pin edge={to-,thin,black}
     numbersep=9pt, % this defines how far the numbers are from the text
     emph=[1]{for,end,break},emphstyle=[1]\color{red}, %some words to emphasise
     %emph=[2]{word1,word2}, emphstyle=[2]{style},    
+    columns=fullflexible,
 }
 
 \pagestyle{plain}
@@ -189,7 +190,7 @@ f = 440; % 440 Hz-es lesz a jel
 t = ( 1:N )' ./ Fs; % Ido oszlopvektora
 y = sin( 2 * pi * f * t );
 plot( t, y );
-xlim([t(1), t(end)]) %grafikon x-tengely hatarainak beallitasa
+xlim([t(1), t(length(t))]) %grafikon x-tengely hatarainak beallitasa
 \end{lstlisting}
 
 \clearpage
@@ -227,6 +228,8 @@ A vízesés diagram 0-tól a mintavételi frekvencia feléig ábrázolja a frekv
 \lstinline{y = ( 1 - ( 1 / l ) * t ) .* sin( 2 * pi * f * t ); % Fokozatosan halkulo jel } \\
 \lstinline{y = sin( t .* ( f * t ) * 2 * pi ); % Valtozo frekvenciaju szinusz } \\
 \lstinline{y = sin( 2 * pi * f * t ) + sin( 2 * pi * (1.5 * f) * t ) ; % Tobb szinusz osszege }
+\\
+\lstinline{y = (sin(2*pi*f*t) > 0)*2-1; % negyszogjel}
 \\
 Megpróbálhatunk akár fehér zajt generálni, vagy hangfájlt betölteni. \\
 \lstinline{y = rand( N, 1 ) ; % N elemu zaj}  \\
