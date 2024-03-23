@@ -249,12 +249,12 @@ int main()
 \clearpage
 A programot saját hardverrel a következő parancssorral lehet futtatni:
 \begin{lstlisting}[frame=single,language=bash]
- rtl_sdr -s 240000 -f 89500000 -g 20 - | tcc -lm -run minidemod-wfm.c | sox -t raw -r 240000 -e unsigned -b 8 -c 1 - -t raw - rate 48000 | aplay -f U8 -c1 -r 48000 --buffer-size=200000
+ rtl_sdr -s 300000 -f 103300000 -g 20 - | tcc -lm -run minidemod-wfm.c | sox -t raw -r 300000 -e unsigned -b 8 -c 1 - -t raw - rate 48000 sinc -15k | aplay -f U8 -c1 -r 48000 --buffer-size=200000
 \end{lstlisting}
 
 Ha nincs saját hardvered, használhatod a Kafu \texttt{rtl\_mus} szerverét ezzel a paranccsal:
 \begin{lstlisting}[frame=single,language=bash]
-nc teto.sch.bme.hu 7373 | tcc -lm -run minidemod-wfm.c | sox -t raw -r 240000 -e unsigned -b 8 -c 1 - -t raw - rate 48000 | aplay -f U8 -c1 -r 48000 --buffer-size=200000
+nc teto.sch.bme.hu 7373 -4 | tcc -lm -run minidemod-wfm.c | sox -t raw -r 300000 -e unsigned -b 8 -c 1 - -t raw - rate 48000 sinc -15k | aplay -f U8 -c1 -r 48000 --buffer-size=200000
 \end{lstlisting}
 
 Mindkét parancssorban az egyes programokat a \texttt{|} (pipe) karakter választja el, ami azt jelzi a shellnek,
@@ -268,7 +268,7 @@ A \texttt{tcc} lefordítja a C kódunkat, és egyből futtatja is az elkészült
 A \texttt{sox} az újramintavételezést végzi el, a 240 kHz-s jelből 48 kHz-eset csinál.
 Az \texttt{aplay} pedig kijátsza a kapott mintákat a hangkártyán.
 
-
+A gyakorlat kiinduló anyagai, illetve megoldásai elérhetőek a \href{https://github.com/simonyiszk/ha5kfu-SDR-gyak} címen.
 
 \end{document}
 
