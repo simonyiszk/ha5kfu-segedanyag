@@ -39,6 +39,15 @@ pinstyle/.style = {pin edge={to-,thin,black}
 \usepackage{color} %red, green, blue, yellow, cyan, magenta, black, white
 \definecolor{mygreen}{RGB}{28,172,0} % color values Red, Green, Blue
 \definecolor{mylilas}{RGB}{170,55,241}
+
+
+\usepackage{accsupp}
+\newcommand{\noncopynumber}[1]{%
+    \BeginAccSupp{method=escape,ActualText={}}%
+    #1%
+    \EndAccSupp{}%
+}
+
 \lstset{language=Matlab,%
 	basicstyle=\scriptsize\ttfamily,
     %basicstyle=\color{red},
@@ -52,7 +61,7 @@ pinstyle/.style = {pin edge={to-,thin,black}
     showstringspaces=false,%without this there will be a symbol in the places where there is a space
     numbers=left,%
     upquote=true, % fix ' characters being replaced with other quote
-    numberstyle={\tiny \color{black}},% size of the numbers
+    numberstyle={\tiny \color{black} \noncopynumber},% size of the numbers
     numbersep=9pt, % this defines how far the numbers are from the text
     emph=[1]{for,end,break},emphstyle=[1]\color{red}, %some words to emphasise
     %emph=[2]{word1,word2}, emphstyle=[2]{style},    
@@ -66,8 +75,8 @@ pinstyle/.style = {pin edge={to-,thin,black}
 \includegraphics[width=300pt,keepaspectratio]{figures/ha5kfu.eps}
 \\[0.5cm]
 Rádióamatőr tanfolyamot segítő jegyzet, egyelőre kidolgozás alatt \\
-2021 ősz \\[0.5cm]
-Szabó Áron HA1FLX, Kiss Ádám HA8KDA, \\ Bazsó Márton HA7BM, Keresztes Botond% Feel free to add yourself
+2024 tavasz \\[0.5cm]
+Szabó Áron HA1FLX, Kiss Ádám HA8KDA, \\ Bazsó Márton HA7BM, Keresztes Botond HA5ERI, Baráth László HA7DN% Feel free to add yourself
 \\[1cm]
 
 {\huge \bfseries Modulációs gyakorlat \\[0.5cm]}
